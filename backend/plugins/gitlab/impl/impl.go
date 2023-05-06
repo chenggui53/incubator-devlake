@@ -19,6 +19,7 @@ package impl
 
 import (
 	"fmt"
+	"github.com/apache/incubator-devlake/helpers/pluginhelper/subtaskmetaSorter"
 	"time"
 
 	"github.com/apache/incubator-devlake/core/context"
@@ -46,6 +47,13 @@ var _ interface {
 } = (*Gitlab)(nil)
 
 type Gitlab string
+
+func init() {
+	// check subtask meta loop when init subtask meta
+	if err := subtaskmetaSorter.GetDependencySorter(tasks.SubTaskMetaList).DetectLoop(); err != nil {
+		panic(err)
+	}
+}
 
 func (p Gitlab) Init(basicRes context.BasicRes) errors.Error {
 	api.Init(basicRes)
@@ -95,44 +103,12 @@ func (p Gitlab) Description() string {
 }
 
 func (p Gitlab) SubTaskMetas() []plugin.SubTaskMeta {
-	return []plugin.SubTaskMeta{
-		tasks.CollectApiIssuesMeta,
-		tasks.ExtractApiIssuesMeta,
-		tasks.CollectApiMergeRequestsMeta,
-		tasks.ExtractApiMergeRequestsMeta,
-		tasks.CollectApiMergeRequestDetailsMeta,
-		tasks.CollectApiMergeRequestDetailsMeta,
-		tasks.CollectApiMrNotesMeta,
-		tasks.ExtractApiMrNotesMeta,
-		tasks.CollectApiMrCommitsMeta,
-		tasks.ExtractApiMrCommitsMeta,
-		tasks.CollectApiPipelinesMeta,
-		tasks.ExtractApiPipelinesMeta,
-		tasks.CollectApiPipelineDetailsMeta,
-		tasks.ExtractApiPipelineDetailsMeta,
-		tasks.CollectApiJobsMeta,
-		tasks.ExtractApiJobsMeta,
-		tasks.EnrichMergeRequestsMeta,
-		tasks.CollectAccountsMeta,
-		tasks.ExtractAccountsMeta,
-		tasks.ConvertAccountsMeta,
-		tasks.ConvertProjectMeta,
-		tasks.ConvertApiMergeRequestsMeta,
-		tasks.ConvertMrCommentMeta,
-		tasks.ConvertApiMrCommitsMeta,
-		tasks.ConvertIssuesMeta,
-		tasks.ConvertIssueLabelsMeta,
-		tasks.ConvertMrLabelsMeta,
-		tasks.ConvertCommitsMeta,
-		tasks.ConvertPipelineMeta,
-		tasks.ConvertPipelineCommitMeta,
-		tasks.ConvertJobMeta,
-		tasks.CollectApiCommitsMeta,
-		tasks.ExtractApiCommitsMeta,
-		tasks.ExtractApiMergeRequestDetailsMeta,
-		tasks.CollectTagMeta,
-		tasks.ExtractTagMeta,
+	list, err := subtaskmetaSorter.GetDependencySorter(tasks.SubTaskMetaList).Sort()
+	if err != nil {
+		panic(err)
 	}
+
+	return list
 }
 
 func (p Gitlab) PrepareTaskData(taskCtx plugin.TaskContext, options map[string]interface{}) (interface{}, errors.Error) {
