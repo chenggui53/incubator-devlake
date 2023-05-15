@@ -27,7 +27,7 @@ import (
 )
 
 func init() {
-	RegisterSubtaskMeta(&CollectAccountsMeta)
+	RegisterSubtaskMeta(&ExtractAccountsMeta)
 }
 
 var ExtractAccountsMeta = plugin.SubTaskMeta{
