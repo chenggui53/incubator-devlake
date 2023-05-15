@@ -17,6 +17,7 @@
  */
 
 export * from './action';
+export * from './alert';
 export * from './card';
 export * from './dialog';
 export * from './divider';
