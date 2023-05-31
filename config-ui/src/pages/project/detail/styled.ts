@@ -25,16 +25,12 @@ export const Wrapper = styled.div`
   }
 `;
 
-export const Settings = styled.div`
-  .block + .block {
-    margin-top: 24px;
-  }
+export const DialogBody = styled.div`
+  display: flex;
+  align-items: center;
 
-  .bp4-control {
-    margin-bottom: 0;
-  }
-
-  .bp4-input-group {
-    width: 386px;
+  .bp4-icon {
+    margin-right: 8px;
+    color: #f4be55;
   }
 `;

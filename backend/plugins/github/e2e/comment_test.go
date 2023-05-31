@@ -37,7 +37,7 @@ func TestCommentDataFlow(t *testing.T) {
 			ConnectionId: 1,
 			Name:         "panjf2000/ants",
 			GithubId:     134018330,
-			GithubTransformationRule: &models.GithubTransformationRule{
+			ScopeConfig: &models.GithubScopeConfig{
 				PrType:               "type/(.*)$",
 				PrComponent:          "component/(.*)$",
 				PrBodyClosePattern:   "(?mi)(fix|close|resolve|fixes|closes|resolves|fixed|closed|resolved)[\\s]*.*(((and )?(#|https:\\/\\/github.com\\/%s\\/issues\\/)\\d+[ ]*)+)",
@@ -130,6 +130,7 @@ func TestCommentDataFlow(t *testing.T) {
 			"body",
 			"account_id",
 			"created_date",
+			"updated_date",
 			"_raw_data_params",
 			"_raw_data_table",
 			"_raw_data_id",

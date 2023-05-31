@@ -19,24 +19,10 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-  .top {
-    display: flex;
-    justify-content: space-between;
-
-    h3 {
-      margin-bottom: 16px;
-    }
-  }
-
   .authentication {
-    h3 {
-      span 
-    }
-  }
-
-  .action {
-    margin-top: 36px;
-    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
 `;
 

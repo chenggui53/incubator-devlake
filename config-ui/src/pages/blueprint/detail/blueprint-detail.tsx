@@ -16,51 +16,89 @@
  *
  */
 
-import React, { useState, useMemo } from 'react';
+import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import type { TabId } from '@blueprintjs/core';
-import { Tabs, Tab } from '@blueprintjs/core';
+import { Tabs, Tab, Switch, Button, Icon, Intent } from '@blueprintjs/core';
 
-import { PageLoading } from '@/components';
+import { PageLoading, Dialog } from '@/components';
+import { useRefreshData } from '@/hooks';
+import { operator } from '@/utils';
 
-import { FromEnum } from '../types';
-
-import type { UseDetailProps } from './use-detail';
-import { useDetail } from './use-detail';
 import { Configuration } from './panel/configuration';
 import { Status } from './panel/status';
+import * as API from './api';
 import * as S from './styled';
 
-interface Props extends UseDetailProps {
-  from?: FromEnum;
-  pname?: string;
+interface Props {
+  id: ID;
 }
 
-export const BlueprintDetail = ({ from = FromEnum.project, pname, id }: Props) => {
-  const [activeTab, setActiveTab] = useState<TabId>('status');
+export const BlueprintDetail = ({ id }: Props) => {
+  const [activeTab, setActiveTab] = useState<TabId>('configuration');
+  const [version, setVersion] = useState(1);
+  const [operating, setOperating] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const paths = useMemo(
-    () =>
-      from === FromEnum.project
-        ? [
-            `/projects/${window.encodeURIComponent(pname ?? '')}/${id}/connection-add`,
-            `/projects/${window.encodeURIComponent(pname ?? '')}/${id}/`,
-          ]
-        : [`/blueprints/${id}/connection-add`, `/blueprints/${id}/`],
-    [from, pname],
+  const history = useHistory();
+
+  const { ready, data } = useRefreshData(
+    async () => Promise.all([API.getBlueprint(id), API.getBlueprintPipelines(id)]),
+    [version],
   );
 
-  const { loading, blueprint, pipelineId, operating, onRun, onUpdate } = useDetail({
-    id,
-  });
-
-  const showJenkinsTips = useMemo(() => {
-    const jenkins = blueprint && blueprint.settings?.connections.find((cs) => cs.plugin === 'jenkins');
-    return jenkins && !jenkins.scopes.length;
-  }, [blueprint]);
-
-  if (loading || !blueprint) {
+  if (!ready || !data) {
     return <PageLoading />;
   }
+
+  const [blueprint, pipelines] = data;
+
+  const handleUpdate = async (payload: any, callback?: () => void) => {
+    const [success] = await operator(
+      () =>
+        API.updateBlueprint(id, {
+          ...blueprint,
+          ...payload,
+        }),
+      {
+        setOperating,
+      },
+    );
+
+    if (success) {
+      setVersion((v) => v + 1);
+      callback?.();
+    }
+  };
+
+  const handleRun = async () => {
+    const [success] = await operator(() => API.runBlueprint(id), {
+      setOperating,
+    });
+
+    if (success) {
+      setVersion((v) => v + 1);
+    }
+  };
+
+  const handleShowDeleteDialog = () => {
+    setIsOpen(true);
+  };
+
+  const handleHideDeleteDialog = () => {
+    setIsOpen(false);
+  };
+
+  const handleDelete = async () => {
+    const [success] = await operator(() => API.deleteBluprint(id), {
+      setOperating,
+      formatMessage: () => 'Delete blueprint successful.',
+    });
+
+    if (success) {
+      history.push('/blueprints');
+    }
+  };
 
   return (
     <S.Wrapper>
@@ -68,19 +106,42 @@ export const BlueprintDetail = ({ from = FromEnum.project, pname, id }: Props) =
         <Tab
           id="status"
           title="Status"
-          panel={<Status blueprint={blueprint} pipelineId={pipelineId} operating={operating} onRun={onRun} />}
+          panel={
+            <Status blueprint={blueprint} pipelineId={pipelines?.[0]?.id} operating={operating} onRun={handleRun} />
+          }
         />
         <Tab
           id="configuration"
           title="Configuration"
-          panel={<Configuration paths={paths} blueprint={blueprint} operating={operating} onUpdate={onUpdate} />}
+          panel={<Configuration blueprint={blueprint} operating={operating} onUpdate={handleUpdate} />}
         />
+        <Tabs.Expander />
+        <Switch
+          style={{ marginBottom: 0 }}
+          label="Blueprint Enabled"
+          checked={blueprint.enable}
+          onChange={(e) => handleUpdate({ enable: (e.target as HTMLInputElement).checked })}
+        />
+        <Button intent={Intent.DANGER} text="Delete Blueprint" onClick={handleShowDeleteDialog} />
       </Tabs>
-      {showJenkinsTips && (
-        <S.JenkinsTips>
-          <p>Please add the "Jenkins jobs" to collect before this Blueprint can run again.</p>
-        </S.JenkinsTips>
-      )}
+      <Dialog
+        isOpen={isOpen}
+        style={{ width: 820 }}
+        title="Are you sure you want to delete this Blueprint?"
+        okText="Confirm"
+        okLoading={operating}
+        onCancel={handleHideDeleteDialog}
+        onOk={handleDelete}
+      >
+        <S.DialogBody>
+          <Icon icon="warning-sign" />
+          <span>
+            Please note: deleting the Blueprint will not delete the historical data of the Data Scopes in this
+            Blueprint. If you would like to delete the historical data of Data Scopes, please visit the Connection page
+            and do so.
+          </span>
+        </S.DialogBody>
+      </Dialog>
     </S.Wrapper>
   );
 };

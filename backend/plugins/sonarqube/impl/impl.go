@@ -173,12 +173,16 @@ func (p Sonarqube) ApiResources() map[string]map[string]plugin.ApiResourceHandle
 			"GET": api.SearchRemoteScopes,
 		},
 		"connections/:connectionId/scopes/:scopeId": {
-			"GET":   api.GetScope,
-			"PATCH": api.UpdateScope,
+			"GET":    api.GetScope,
+			"PATCH":  api.UpdateScope,
+			"DELETE": api.DeleteScope,
 		},
 		"connections/:connectionId/scopes": {
 			"GET": api.GetScopeList,
 			"PUT": api.PutScope,
+		},
+		"connections/:connectionId/proxy/rest/*path": {
+			"GET": api.Proxy,
 		},
 	}
 }

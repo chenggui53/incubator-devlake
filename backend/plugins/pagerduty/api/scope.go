@@ -58,7 +58,7 @@ func PutScope(input *plugin.ApiResourceInput) (*plugin.ApiResourceOutput, errors
 // @Failure 500  {object} shared.ApiBody "Internal Error"
 // @Router /plugins/pagerduty/connections/{connectionId}/scopes/{serviceId} [PATCH]
 func UpdateScope(input *plugin.ApiResourceInput) (*plugin.ApiResourceOutput, errors.Error) {
-	return scopeHelper.Update(input, "")
+	return scopeHelper.Update(input)
 }
 
 // GetScopeList get PagerDuty repos
@@ -74,7 +74,7 @@ func UpdateScope(input *plugin.ApiResourceInput) (*plugin.ApiResourceOutput, err
 // @Failure 500  {object} shared.ApiBody "Internal Error"
 // @Router /plugins/pagerduty/connections/{connectionId}/scopes/ [GET]
 func GetScopeList(input *plugin.ApiResourceInput) (*plugin.ApiResourceOutput, errors.Error) {
-	return scopeHelper.GetScopeList(input, "Id")
+	return scopeHelper.GetScopeList(input)
 }
 
 // GetScope get one PagerDuty service
@@ -89,7 +89,7 @@ func GetScopeList(input *plugin.ApiResourceInput) (*plugin.ApiResourceOutput, er
 // @Failure 500  {object} shared.ApiBody "Internal Error"
 // @Router /plugins/pagerduty/connections/{connectionId}/scopes/{serviceId} [GET]
 func GetScope(input *plugin.ApiResourceInput) (*plugin.ApiResourceOutput, errors.Error) {
-	return scopeHelper.GetScope(input, "id")
+	return scopeHelper.GetScope(input)
 }
 
 // DeleteScope delete plugin data associated with the scope and optionally the scope itself
@@ -99,10 +99,10 @@ func GetScope(input *plugin.ApiResourceInput) (*plugin.ApiResourceOutput, errors
 // @Param connectionId path int true "connection ID"
 // @Param serviceId path int true "service ID"
 // @Param delete_data_only query bool false "Only delete the scope data, not the scope itself"
-// @Success 200  {object} []models.Blueprint "list of blueprints impacted by the deletion"
+// @Success 200
 // @Failure 400  {object} shared.ApiBody "Bad Request"
 // @Failure 500  {object} shared.ApiBody "Internal Error"
 // @Router /plugins/pagerduty/connections/{connectionId}/scopes/{serviceId} [DELETE]
 func DeleteScope(input *plugin.ApiResourceInput) (*plugin.ApiResourceOutput, errors.Error) {
-	return scopeHelper.DeleteScope(input, "Id", "ScopeId", nil)
+	return scopeHelper.Delete(input)
 }

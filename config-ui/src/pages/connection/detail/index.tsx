@@ -20,12 +20,16 @@ import { useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { Button, Icon, Intent } from '@blueprintjs/core';
 
-import { PageHeader, Dialog, IconButton, Table } from '@/components';
-import { transformEntities } from '@/config';
-import { useRefreshData } from '@/hooks';
-import { ConnectionForm, DataScopeForm2 } from '@/plugins';
-import type { ConnectionItemType } from '@/store';
-import { ConnectionContextProvider, useConnection, ConnectionStatus, useTips } from '@/store';
+import { PageHeader, Buttons, Dialog, IconButton, Table } from '@/components';
+import { useTips, useConnections, useRefreshData } from '@/hooks';
+import {
+  ConnectionForm,
+  ConnectionStatus,
+  DataScopeSelectRemote,
+  getPluginId,
+  ScopeConfigForm,
+  ScopeConfigSelect,
+} from '@/plugins';
 import { operator } from '@/utils';
 
 import * as API from './api';
@@ -37,25 +41,33 @@ interface Props {
 }
 
 const ConnectionDetail = ({ plugin, id }: Props) => {
-  const [type, setType] = useState<'deleteConnection' | 'updateConnection' | 'createDataScope'>();
+  const [type, setType] = useState<
+    | 'deleteConnection'
+    | 'updateConnection'
+    | 'createDataScope'
+    | 'clearDataScope'
+    | 'deleteDataScope'
+    | 'associateScopeConfig'
+  >();
   const [operating, setOperating] = useState(false);
   const [version, setVersion] = useState(1);
+  const [scopeId, setScopeId] = useState<ID>();
+  const [scopeIds, setScopeIds] = useState<ID[]>([]);
+  const [scopeConfigId, setScopeConfigId] = useState<ID>();
 
   const history = useHistory();
-  const { connections, onRefresh, onTest } = useConnection();
-  const { setText } = useTips();
-  const { ready, data } = useRefreshData(() => API.getDataScope(plugin, id), [version]);
+  const { onGet, onTest, onRefresh } = useConnections();
+  const { setTips } = useTips();
+  const { ready, data } = useRefreshData(() => API.getDataScopes(plugin, id), [version]);
 
-  const { unique, status, name, icon, entities } = connections.find(
-    (cs) => cs.unique === `${plugin}-${id}`,
-  ) as ConnectionItemType;
+  const { unique, status, name, icon } = onGet(`${plugin}-${id}`);
 
   const handleHideDialog = () => {
     setType(undefined);
   };
 
   const handleShowTips = () => {
-    setText(
+    setTips(
       <div>
         <Icon icon="warning-sign" style={{ marginRight: 8 }} color="#F4BE55" />
         <span>
@@ -100,6 +112,61 @@ const ConnectionDetail = ({ plugin, id }: Props) => {
     handleHideDialog();
   };
 
+  const handleShowClearDataScopeDialog = (scopeId: ID) => {
+    setType('clearDataScope');
+    setScopeId(scopeId);
+  };
+
+  const handleShowDeleteDataScopeDialog = (scopeId: ID) => {
+    setType('deleteDataScope');
+    setScopeId(scopeId);
+  };
+
+  const handleDeleteDataScope = async (onlyData: boolean) => {
+    if (!scopeId) return;
+
+    const [success] = await operator(() => API.deleteDataScope(plugin, id, scopeId, onlyData), {
+      setOperating,
+      formatMessage: () => (onlyData ? 'Clear historical data successful.' : 'Delete Data Scope successful.'),
+    });
+
+    if (success) {
+      setVersion((v) => v + 1);
+      handleShowTips();
+      handleHideDialog();
+    }
+  };
+
+  const handleShowScopeConfigSelectDialog = (scopeIds: ID[]) => {
+    setType('associateScopeConfig');
+    setScopeIds(scopeIds);
+  };
+
+  const handleAssociateScopeConfig = async (trId: ID) => {
+    const [success] = await operator(
+      () =>
+        Promise.all(
+          scopeIds.map(async (scopeId) => {
+            const scope = await API.getDataScope(plugin, id, scopeId);
+            return API.updateDataScope(plugin, id, scopeId, {
+              ...scope,
+              scopeConfigId: +trId,
+            });
+          }),
+        ),
+      {
+        setOperating,
+        formatMessage: () => `Associate scope config successful.`,
+      },
+    );
+
+    if (success) {
+      setVersion((v) => v + 1);
+      handleShowTips();
+      handleHideDialog();
+    }
+  };
+
   return (
     <PageHeader
       breadcrumbs={[
@@ -109,29 +176,22 @@ const ConnectionDetail = ({ plugin, id }: Props) => {
       extra={<Button intent={Intent.DANGER} icon="trash" text="Delete Connection" onClick={handleShowDeleteDialog} />}
     >
       <S.Wrapper>
-        <div className="top">
-          <div className="entities">
-            <h3>Data Entities</h3>
-            <span>
-              {transformEntities(entities)
-                .map((it) => it.label)
-                .join(',')}
-            </span>
-          </div>
-          <div className="authentication">
-            <h3>
-              <span>Authentication</span>
-              <IconButton icon="annotation" tooltip="Edit Connection" onClick={handleShowUpdateDialog} />
-            </h3>
-            <span>Status: </span>
-            <span>
-              Status: <ConnectionStatus status={status} unique={unique} onTest={onTest} />
-            </span>
-          </div>
+        <div className="authentication">
+          <span style={{ marginRight: 4 }}>Authentication Status:</span>
+          <ConnectionStatus status={status} unique={unique} onTest={onTest} />
+          <IconButton icon="annotation" tooltip="Edit Connection" onClick={handleShowUpdateDialog} />
         </div>
-        <div className="action">
+        <Buttons position="top" align="left">
           <Button intent={Intent.PRIMARY} icon="add" text="Add Data Scope" onClick={handleShowCreateDataScopeDialog} />
-        </div>
+          {plugin !== 'tapd' && (
+            <Button
+              intent={Intent.PRIMARY}
+              icon="many-to-one"
+              text="Associate Scope Config"
+              onClick={() => handleShowScopeConfigSelectDialog(scopeIds)}
+            />
+          )}
+        </Buttons>
         <Table
           loading={!ready}
           columns={[
@@ -140,6 +200,47 @@ const ConnectionDetail = ({ plugin, id }: Props) => {
               dataIndex: 'name',
               key: 'name',
             },
+            {
+              title: 'Scope Config',
+              dataIndex: 'scopeConfigName',
+              key: 'scopeConfig',
+              width: 400,
+              render: (val, row) => (
+                <>
+                  <span>{val ?? 'No Scope Config'}</span>
+                  <IconButton
+                    icon="link"
+                    tooltip="Associate Scope Config"
+                    onClick={() => {
+                      handleShowScopeConfigSelectDialog([row[getPluginId(plugin)]]);
+                      if (plugin === 'tapd') {
+                        setScopeConfigId(row.scopeConfigId);
+                      }
+                    }}
+                  />
+                </>
+              ),
+            },
+            {
+              title: '',
+              dataIndex: getPluginId(plugin),
+              key: 'id',
+              width: 100,
+              render: (id) => (
+                <>
+                  <IconButton
+                    icon="unarchive"
+                    tooltip="Clear historical data"
+                    onClick={() => handleShowClearDataScopeDialog(id)}
+                  />
+                  <IconButton
+                    icon="trash"
+                    tooltip="Delete Data Scope"
+                    onClick={() => handleShowDeleteDataScopeDialog(id)}
+                  />
+                </>
+              ),
+            },
           ]}
           dataSource={data}
           noData={{
@@ -147,11 +248,17 @@ const ConnectionDetail = ({ plugin, id }: Props) => {
             btnText: 'Add Data Scope',
             onCreate: handleShowCreateDataScopeDialog,
           }}
+          rowSelection={{
+            rowKey: getPluginId(plugin),
+            selectedRowKeys: scopeIds,
+            onChange: (selectedRowKeys) => setScopeIds(selectedRowKeys),
+          }}
         />
       </S.Wrapper>
       {type === 'deleteConnection' && (
         <Dialog
           isOpen
+          style={{ width: 820 }}
           title="Would you like to delete this Data Connection?"
           okText="Confirm"
           okLoading={operating}
@@ -196,13 +303,69 @@ const ConnectionDetail = ({ plugin, id }: Props) => {
           }
           onCancel={handleHideDialog}
         >
-          <DataScopeForm2
+          <DataScopeSelectRemote
             plugin={plugin}
             connectionId={id}
             disabledScope={data}
             onCancel={handleHideDialog}
             onSubmit={handleCreateDataScope}
           />
+        </Dialog>
+      )}
+      {type === 'clearDataScope' && (
+        <Dialog
+          isOpen
+          style={{ width: 820 }}
+          title="Would you like to clear the historical data of the selected Data Scope?"
+          okText="Confirm"
+          okLoading={operating}
+          onCancel={handleHideDialog}
+          onOk={() => handleDeleteDataScope(true)}
+        >
+          <S.DialogBody>
+            <Icon icon="warning-sign" />
+            <span>This operation cannot be undone.</span>
+          </S.DialogBody>
+        </Dialog>
+      )}
+      {type === 'deleteDataScope' && (
+        <Dialog
+          isOpen
+          style={{ width: 820 }}
+          title="Would you like to delete the selected Data Scope?"
+          okText="Confirm"
+          okLoading={operating}
+          onCancel={handleHideDialog}
+          onOk={() => handleDeleteDataScope(false)}
+        >
+          <S.DialogBody>
+            <Icon icon="warning-sign" />
+            <span>
+              This operation cannot be undone. Deleting Data Scope will delete all data that have been collected in the
+              past.
+            </span>
+          </S.DialogBody>
+        </Dialog>
+      )}
+      {type === 'associateScopeConfig' && (
+        <Dialog isOpen style={{ width: 820 }} footer={null} title="Associate Scope Config" onCancel={handleHideDialog}>
+          {plugin === 'tapd' ? (
+            <ScopeConfigForm
+              plugin={plugin}
+              connectionId={id}
+              scopeId={scopeIds[0]}
+              scopeConfigId={scopeConfigId}
+              onCancel={handleHideDialog}
+              onSubmit={handleAssociateScopeConfig}
+            />
+          ) : (
+            <ScopeConfigSelect
+              plugin={plugin}
+              connectionId={id}
+              onCancel={handleHideDialog}
+              onSubmit={handleAssociateScopeConfig}
+            />
+          )}
         </Dialog>
       )}
     </PageHeader>
@@ -212,9 +375,5 @@ const ConnectionDetail = ({ plugin, id }: Props) => {
 export const ConnectionDetailPage = () => {
   const { plugin, id } = useParams<{ plugin: string; id: string }>();
 
-  return (
-    <ConnectionContextProvider plugin={plugin}>
-      <ConnectionDetail plugin={plugin} id={+id} />
-    </ConnectionContextProvider>
-  );
+  return <ConnectionDetail plugin={plugin} id={+id} />;
 };

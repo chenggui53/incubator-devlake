@@ -22,14 +22,15 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"net/url"
+	"strconv"
+
 	"github.com/apache/incubator-devlake/core/errors"
 	"github.com/apache/incubator-devlake/core/plugin"
 	"github.com/apache/incubator-devlake/helpers/pluginhelper/api"
 	"github.com/apache/incubator-devlake/plugins/pagerduty/models"
-	"net/http"
-	"net/url"
-	"strconv"
-	"time"
+	"github.com/apache/incubator-devlake/plugins/pagerduty/models/raw"
 )
 
 type RemoteScopesChild struct {
@@ -56,110 +57,16 @@ type PageData struct {
 	PerPage int `json:"per_page"`
 }
 
-type TeamResponse struct {
-	Offset int  `json:"offset"`
-	Limit  int  `json:"limit"`
-	More   bool `json:"more"`
-	Total  int  `json:"total"`
-	Teams  []struct {
-		Id   string `json:"id"`
-		Name string `json:"name"`
-	} `json:"teams"`
-}
-
-type WorkspaceItem struct {
-	//Type string `json:"type"`
-	//Uuid string `json:"uuid"`
-	Slug string `json:"slug"`
-	Name string `json:"name"`
-}
-
-type ReposResponse struct {
-	Pagelen int              `json:"pagelen"`
-	Page    int              `json:"page"`
-	Size    int              `json:"size"`
-	Values  []models.Service `json:"values"`
-}
-
 type ServiceResponse struct {
-	Offset   int  `json:"offset"`
-	Limit    int  `json:"limit"`
-	More     bool `json:"more"`
-	Total    int  `json:"total"`
-	Services []struct {
-		Id                      string    `json:"id"`
-		Summary                 string    `json:"summary"`
-		Type                    string    `json:"type"`
-		Self                    string    `json:"self"`
-		HtmlUrl                 string    `json:"html_url"`
-		Name                    string    `json:"name"`
-		AutoResolveTimeout      int       `json:"auto_resolve_timeout"`
-		AcknowledgementTimeout  int       `json:"acknowledgement_timeout"`
-		CreatedAt               time.Time `json:"created_at"`
-		Status                  string    `json:"status"`
-		AlertCreation           string    `json:"alert_creation"`
-		AlertGroupingParameters struct {
-			Type string `json:"type"`
-		} `json:"alert_grouping_parameters"`
-		Integrations []struct {
-			Id      string `json:"id"`
-			Type    string `json:"type"`
-			Summary string `json:"summary"`
-			Self    string `json:"self"`
-			HtmlUrl string `json:"html_url"`
-		} `json:"integrations"`
-		EscalationPolicy struct {
-			Id      string `json:"id"`
-			Type    string `json:"type"`
-			Summary string `json:"summary"`
-			Self    string `json:"self"`
-			HtmlUrl string `json:"html_url"`
-		} `json:"escalation_policy"`
-		Teams []struct {
-			Id      string `json:"id"`
-			Type    string `json:"type"`
-			Summary string `json:"summary"`
-			Self    string `json:"self"`
-			HtmlUrl string `json:"html_url"`
-		} `json:"teams"`
-		IncidentUrgencyRule struct {
-			Type               string `json:"type"`
-			DuringSupportHours struct {
-				Type    string `json:"type"`
-				Urgency string `json:"urgency"`
-			} `json:"during_support_hours"`
-			OutsideSupportHours struct {
-				Type    string `json:"type"`
-				Urgency string `json:"urgency"`
-			} `json:"outside_support_hours"`
-		} `json:"incident_urgency_rule"`
-		SupportHours struct {
-			Type       string `json:"type"`
-			TimeZone   string `json:"time_zone"`
-			StartTime  string `json:"start_time"`
-			EndTime    string `json:"end_time"`
-			DaysOfWeek []int  `json:"days_of_week"`
-		} `json:"support_hours"`
-		ScheduledActions []struct {
-			Type string `json:"type"`
-			At   struct {
-				Type string `json:"type"`
-				Name string `json:"name"`
-			} `json:"at"`
-			ToUrgency string `json:"to_urgency"`
-		} `json:"scheduled_actions"`
-		AutoPauseNotificationsParameters struct {
-			Enabled bool `json:"enabled"`
-			Timeout int  `json:"timeout"`
-		} `json:"auto_pause_notifications_parameters"`
-	}
+	Offset   int           `json:"offset"`
+	Limit    int           `json:"limit"`
+	More     bool          `json:"more"`
+	Total    int           `json:"total"`
+	Services []raw.Service `json:"services"`
 }
 
 const RemoteScopesPerPage int = 100
 const TypeScope string = "scope"
-const TypeGroup string = "group"
-
-//const TypeGroup string = "group"
 
 // RemoteScopes list all available scopes (services) for this connection
 // @Summary list all available scopes (services) for this connection
@@ -224,10 +131,10 @@ func RemoteScopes(input *plugin.ApiResourceInput) (*plugin.ApiResourceOutput, er
 			Id:   service.Id,
 			Name: service.Name,
 			Data: models.Service{
-				Url:                  service.HtmlUrl,
-				Id:                   service.Id,
-				TransformationRuleId: 0, // this is not determined here
-				Name:                 service.Name,
+				Url:           service.HtmlUrl,
+				Id:            service.Id,
+				ScopeConfigId: 0, // this is not determined here
+				Name:          service.Name,
 			},
 		}
 		outputBody.Children = append(outputBody.Children, child)
@@ -302,7 +209,7 @@ func DecodeFromPageToken(pageToken string) (*PageData, errors.Error) {
 
 func GetQueryFromPageData(pageData *PageData) (url.Values, errors.Error) {
 	query := url.Values{}
-	query.Set("offset", fmt.Sprintf("%v", pageData.Page))
+	query.Set("offset", fmt.Sprintf("%v", pageData.Page*pageData.PerPage))
 	query.Set("limit", fmt.Sprintf("%v", pageData.PerPage))
 	return query, nil
 }

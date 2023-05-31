@@ -36,7 +36,7 @@ func TestCommentDataFlow(t *testing.T) {
 		Options: &tasks.BitbucketOptions{
 			ConnectionId: 1,
 			FullName:     "likyh/likyhphp",
-			BitbucketTransformationRule: &models.BitbucketTransformationRule{
+			BitbucketScopeConfig: &models.BitbucketScopeConfig{
 				IssueStatusTodo:       "new,open",
 				IssueStatusInProgress: "on hold",
 				IssueStatusDone:       "closed",
@@ -64,6 +64,8 @@ func TestCommentDataFlow(t *testing.T) {
 			"author_name",
 			"author_id",
 			"type",
+			"body",
+			"bitbucket_updated_at",
 		),
 	)
 	dataflowTester.VerifyTable(
@@ -109,6 +111,8 @@ func TestCommentDataFlow(t *testing.T) {
 			"issue_id",
 			"body",
 			"account_id",
+			"body",
+			"updated_date",
 		),
 	)
 

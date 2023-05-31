@@ -21,7 +21,7 @@ import { useState, useEffect, useMemo } from 'react';
 export interface UseRowSelectionProps<T> {
   dataSource: T[];
   rowSelection?: {
-    rowKey: string;
+    rowKey: ID;
     type?: 'checkbox' | 'radio';
     selectedRowKeys?: ID[];
     onChange?: (selectedRowKeys: ID[]) => void;
@@ -66,7 +66,7 @@ export const useRowSelection = <T>({ dataSource, rowSelection }: UseRowSelection
   };
 
   const handleCheckedAll = () => {
-    let result: ID[] = [];
+    let result: string[] = [];
 
     if (selectedKeys.length !== dataSource.length) {
       result = dataSource.map((data: any) => data[rowKey]);

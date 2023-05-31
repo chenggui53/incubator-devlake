@@ -18,9 +18,10 @@ limitations under the License.
 package apiv2models
 
 import (
+	"time"
+
 	helper "github.com/apache/incubator-devlake/helpers/pluginhelper/api"
 	"github.com/apache/incubator-devlake/plugins/jira/models"
-	"time"
 )
 
 type Comment struct {
