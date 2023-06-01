@@ -41,5 +41,6 @@ func All() []plugin.MigrationScript {
 		new(fixRunNameToText),
 		new(addGithubMultiAuth),
 		new(renameTr2ScopeConfig),
+		new(addGithubIssueAssignee),
 	}
 }

@@ -101,7 +101,7 @@ func CollectTask(taskCtx plugin.SubTaskContext) errors.Error {
 }
 
 var CollectTaskMeta = plugin.SubTaskMeta{
-	Name:             "CollectTask",
+	Name:             "collectTask",
 	EntryPoint:       CollectTask,
 	EnabledByDefault: true,
 	Description:      "Collect Task data from Zentao api",
