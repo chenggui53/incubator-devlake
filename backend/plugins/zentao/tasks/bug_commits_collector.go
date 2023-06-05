@@ -19,10 +19,7 @@ package tasks
 
 import (
 	"encoding/json"
-	"fmt"
-	"io"
 	"net/http"
-	"net/url"
 	"reflect"
 
 	"github.com/apache/incubator-devlake/core/dal"
@@ -54,6 +51,7 @@ func CollectBugCommits(taskCtx plugin.SubTaskContext) errors.Error {
 		Params: ZentaoApiParams{
 			ConnectionId: data.Options.ConnectionId,
 			ProductId:    data.Options.ProductId,
+			ProjectId:    data.Options.ProjectId,
 		},
 		Table: RAW_BUG_COMMITS_TABLE,
 	}, data.TimeAfter)
@@ -63,7 +61,7 @@ func CollectBugCommits(taskCtx plugin.SubTaskContext) errors.Error {
 
 	// load bugs id from db
 	clauses := []dal.Clause{
-		dal.Select("id"),
+		dal.Select("id, last_edited_date"),
 		dal.From(&models.ZentaoBug{}),
 		dal.Where(
 			"product = ? AND connection_id = ?",
@@ -75,7 +73,7 @@ func CollectBugCommits(taskCtx plugin.SubTaskContext) errors.Error {
 	if incremental {
 		clauses = append(
 			clauses,
-			dal.Where("updated_at > ?", collectorWithState.LatestState.LatestSuccessStart),
+			dal.Where("last_edited_date is not null and last_edited_date > ?", collectorWithState.LatestState.LatestSuccessStart),
 		)
 	}
 	cursor, err := db.Cursor(clauses...)
@@ -93,6 +91,7 @@ func CollectBugCommits(taskCtx plugin.SubTaskContext) errors.Error {
 			Params: ZentaoApiParams{
 				ConnectionId: data.Options.ConnectionId,
 				ProductId:    data.Options.ProductId,
+				ProjectId:    data.Options.ProjectId,
 			},
 			Table: RAW_BUG_COMMITS_TABLE,
 		},
@@ -101,21 +100,18 @@ func CollectBugCommits(taskCtx plugin.SubTaskContext) errors.Error {
 		Input:       iterator,
 		Incremental: incremental,
 		UrlTemplate: "bugs/{{ .Input.ID }}",
-		Query: func(reqData *api.RequestData) (url.Values, errors.Error) {
-			query := url.Values{}
-			query.Set("page", fmt.Sprintf("%v", reqData.Pager.Page))
-			query.Set("per_page", fmt.Sprintf("%v", reqData.Pager.Size))
-			return query, nil
-		},
-		GetTotalPages: GetTotalPagesFromResponse,
 		ResponseParser: func(res *http.Response) ([]json.RawMessage, errors.Error) {
-			body, err := io.ReadAll(res.Body)
-			if err != nil {
-				return nil, errors.Convert(err)
+			var data struct {
+				Actions []json.RawMessage `json:"actions"`
 			}
-			res.Body.Close()
-			return []json.RawMessage{body}, nil
+			err := api.UnmarshalResponse(res, &data)
+			if err != nil {
+				return nil, err
+			}
+			return data.Actions, nil
+
 		},
+		AfterResponse: ignoreHTTPStatus404,
 	})
 	if err != nil {
 		return err

@@ -85,7 +85,24 @@ func (p Zentao) SubTaskMetas() []plugin.SubTaskMeta {
 		tasks.CollectDepartmentMeta,
 		tasks.ExtractDepartmentMeta,
 		tasks.ConvertDepartmentMeta,
+
 		tasks.CollectBugCommitsMeta,
+		tasks.ExtractBugCommitsMeta,
+		tasks.CollectBugRepoCommitsMeta,
+		tasks.ExtractBugRepoCommitsMeta,
+		tasks.ConvertBugRepoCommitsMeta,
+
+		tasks.CollectStoryCommitsMeta,
+		tasks.ExtractStoryCommitsMeta,
+		tasks.CollectStoryRepoCommitsMeta,
+		tasks.ExtractStoryRepoCommitsMeta,
+		tasks.ConvertStoryRepoCommitsMeta,
+
+		tasks.CollectTaskCommitsMeta,
+		tasks.ExtractTaskCommitsMeta,
+		tasks.CollectTaskRepoCommitsMeta,
+		tasks.ExtractTaskRepoCommitsMeta,
+		tasks.ConvertTaskRepoCommitsMeta,
 	}
 }
 
@@ -194,6 +211,14 @@ func (p Zentao) ApiResources() map[string]map[string]plugin.ApiResourceHandler {
 			"GET":    api.GetProjectScope,
 			"PATCH":  api.UpdateProjectScope,
 			"DELETE": api.DeleteProjectScope,
+		},
+		"connections/:connectionId/scope-configs": {
+			"POST": api.CreateScopeConfig,
+			"GET":  api.GetScopeConfigList,
+		},
+		"connections/:connectionId/scope-configs/:id": {
+			"PATCH": api.UpdateScopeConfig,
+			"GET":   api.GetScopeConfig,
 		},
 		"connections/:connectionId/remote-scopes": {
 			"GET": api.RemoteScopes,

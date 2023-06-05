@@ -42,7 +42,7 @@ var _ interface {
 	plugin.PluginMigration
 	plugin.DataSourcePluginBlueprintV200
 	plugin.CloseablePluginTask
-	plugin.PluginSource
+	// plugin.PluginSource
 } = (*Jira)(nil)
 
 type Jira struct {
@@ -135,6 +135,9 @@ func (p Jira) SubTaskMetas() []plugin.SubTaskMeta {
 
 		tasks.ConvertSprintsMeta,
 		tasks.ConvertSprintIssuesMeta,
+
+		tasks.CollectDevelopmentPanelMeta,
+		tasks.ExtractDevelopmentPanelMeta,
 
 		tasks.ConvertIssueCommitsMeta,
 		tasks.ConvertIssueRepoCommitsMeta,
@@ -291,13 +294,19 @@ func (p Jira) ApiResources() map[string]map[string]plugin.ApiResourceHandler {
 			"GET": api.GetScopeList,
 			"PUT": api.PutScope,
 		},
-		"connections/:connectionId/scope_configs": {
+		"connections/:connectionId/scope-configs": {
 			"POST": api.CreateScopeConfig,
 			"GET":  api.GetScopeConfigList,
 		},
-		"connections/:connectionId/scope_configs/:id": {
+		"connections/:connectionId/scope-configs/:id": {
 			"PATCH": api.UpdateScopeConfig,
 			"GET":   api.GetScopeConfig,
+		},
+		"connections/:connectionId/application-types": {
+			"GET": api.GetApplicationTypes,
+		},
+		"connections/:connectionId/dev-panel-commits": {
+			"GET": api.GetCommitsURLs,
 		},
 	}
 }
