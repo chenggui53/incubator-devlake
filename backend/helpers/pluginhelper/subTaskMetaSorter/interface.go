@@ -15,11 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package subtaskmetaSorter
+package subTaskMetaSorter
 
 import "github.com/apache/incubator-devlake/core/plugin"
 
 type SubTaskMetaSorter interface {
 	Sort() ([]plugin.SubTaskMeta, error)
-	DetectLoop() error
 }
