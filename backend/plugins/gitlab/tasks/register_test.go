@@ -17,16 +17,12 @@ package tasks
 
 import (
 	"github.com/apache/incubator-devlake/core/plugin"
-	"github.com/apache/incubator-devlake/helpers/pluginhelper/subtaskmetaSorter"
+	"github.com/apache/incubator-devlake/helpers/pluginhelper/subTaskMetaSorter"
 	"testing"
 )
 
 func TestGetSubtaskList(t *testing.T) {
-	sorter := subtaskmetaSorter.GetDependencySorter(SubTaskMetaList)
-	if err := sorter.DetectLoop(); err != nil {
-		t.Error(err)
-		return
-	}
+	sorter := subTaskMetaSorter.GetDependencySorter(SubTaskMetaList)
 	list, err := sorter.Sort()
 	if err != nil {
 		t.Error(err)
