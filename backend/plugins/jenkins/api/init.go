@@ -27,8 +27,6 @@ import (
 var vld *validator.Validate
 var connectionHelper *api.ConnectionApiHelper
 var scopeHelper *api.ScopeApiHelper[models.JenkinsConnection, models.JenkinsJob, models.JenkinsScopeConfig]
-var remoteHelper *api.RemoteApiHelper[models.JenkinsConnection, models.JenkinsJob, models.Job, models.Job]
-
 var basicRes context.BasicRes
 var scHelper *api.ScopeConfigHelper[models.JenkinsScopeConfig]
 
@@ -51,11 +49,6 @@ func Init(br context.BasicRes) {
 			basicRes, connectionHelper, params),
 		params,
 		nil,
-	)
-	remoteHelper = api.NewRemoteHelper[models.JenkinsConnection, models.JenkinsJob, models.Job, models.Job](
-		basicRes,
-		vld,
-		connectionHelper,
 	)
 	scHelper = api.NewScopeConfigHelper[models.JenkinsScopeConfig](
 		basicRes,

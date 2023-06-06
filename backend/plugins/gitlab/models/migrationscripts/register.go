@@ -36,6 +36,5 @@ func All() []plugin.MigrationScript {
 		new(addGitlabCommitAuthorInfo),
 		new(addTypeEnvToPipeline),
 		new(renameTr2ScopeConfig),
-		new(addGitlabIssueAssignee),
 	}
 }
