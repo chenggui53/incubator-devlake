@@ -73,7 +73,8 @@ func TestGetSubtaskList(t *testing.T) {
 	}
 	for index, item := range rawList {
 		if item.Name != list[index].Name {
-			t.Errorf("get wrong item name in given index, index[%d] rawitem[%s] item[]%s]", index, item.Name, list[index].Name)
+			t.Errorf("get wrong item name in given index, index[%d] rawitem[%s] item[]%s]",
+				index, item.Name, list[index].Name)
 			return
 		}
 	}
