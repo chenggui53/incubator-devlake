@@ -21,10 +21,10 @@ import (
 	"fmt"
 	"github.com/apache/incubator-devlake/core/context"
 	"github.com/apache/incubator-devlake/core/dal"
-
 	"github.com/apache/incubator-devlake/core/errors"
 	"github.com/apache/incubator-devlake/core/plugin"
 	helper "github.com/apache/incubator-devlake/helpers/pluginhelper/api"
+	"github.com/apache/incubator-devlake/helpers/pluginhelper/subtaskmeta_sorter"
 	"github.com/apache/incubator-devlake/plugins/feishu/api"
 	"github.com/apache/incubator-devlake/plugins/feishu/models"
 	"github.com/apache/incubator-devlake/plugins/feishu/models/migrationscripts"
@@ -38,6 +38,15 @@ var _ plugin.PluginApi = (*Feishu)(nil)
 var _ plugin.PluginModel = (*Feishu)(nil)
 var _ plugin.PluginMigration = (*Feishu)(nil)
 var _ plugin.CloseablePluginTask = (*Feishu)(nil)
+var sortedSubtaskPlugins []plugin.SubTaskMeta
+
+func init() {
+	var err error
+	sortedSubtaskPlugins, err = subtaskmeta_sorter.NewTableSorter(tasks.SubtaskMetas).Sort()
+	if err != nil {
+		panic(err)
+	}
+}
 
 type Feishu struct{}
 
@@ -58,16 +67,7 @@ func (p Feishu) Description() string {
 }
 
 func (p Feishu) SubTaskMetas() []plugin.SubTaskMeta {
-	return []plugin.SubTaskMeta{
-		tasks.CollectChatMeta,
-		tasks.ExtractChatItemMeta,
-
-		tasks.CollectMessageMeta,
-		tasks.ExtractMessageMeta,
-
-		tasks.CollectMeetingTopUserItemMeta,
-		tasks.ExtractMeetingTopUserItemMeta,
-	}
+	return sortedSubtaskPlugins
 }
 
 func (p Feishu) PrepareTaskData(taskCtx plugin.TaskContext, options map[string]interface{}) (interface{}, errors.Error) {

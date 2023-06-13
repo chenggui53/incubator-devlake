@@ -31,12 +31,17 @@ import (
 	"strings"
 )
 
+func init() {
+	RegisterSubtaskMeta(&ConvertAccountsMeta)
+}
+
 var ConvertAccountsMeta = plugin.SubTaskMeta{
 	Name:             "convertAccounts",
 	EntryPoint:       ConvertAccounts,
 	EnabledByDefault: true,
 	Description:      "Convert tool layer table github_accounts into  domain layer table accounts",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_CROSS},
+	Dependencies:     []*plugin.SubTaskMeta{&ConvertMilestonesMeta},
 }
 
 type GithubAccountWithOrg struct {

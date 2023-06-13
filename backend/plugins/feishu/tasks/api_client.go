@@ -43,3 +43,9 @@ func NewFeishuApiClient(taskCtx plugin.TaskContext, connection *models.FeishuCon
 
 	return asyncApiClient, nil
 }
+
+var SubtaskMetas []*plugin.SubTaskMeta
+
+func RegisterSubtaskMeta(meta *plugin.SubTaskMeta) {
+	SubtaskMetas = append(SubtaskMetas, meta)
+}

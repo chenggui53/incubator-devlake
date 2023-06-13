@@ -25,6 +25,10 @@ import (
 	"github.com/apache/incubator-devlake/plugins/feishu/models"
 )
 
+func init() {
+	RegisterSubtaskMeta(&ExtractMeetingTopUserItemMeta)
+}
+
 var _ plugin.SubTaskEntryPoint = ExtractMeetingTopUserItem
 
 func ExtractMeetingTopUserItem(taskCtx plugin.SubTaskContext) errors.Error {
@@ -72,4 +76,5 @@ var ExtractMeetingTopUserItemMeta = plugin.SubTaskMeta{
 	EntryPoint:       ExtractMeetingTopUserItem,
 	EnabledByDefault: true,
 	Description:      "Extract raw top user meeting data into tool layer table feishu_meeting_top_user_item",
+	Tables:           []string{RAW_MEETING_TOP_USER_ITEM_TABLE},
 }

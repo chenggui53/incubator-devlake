@@ -28,6 +28,10 @@ import (
 	"time"
 )
 
+func init() {
+	RegisterSubtaskMeta(&ExtractMessageMeta)
+}
+
 var _ plugin.SubTaskEntryPoint = ExtractMessage
 
 func ExtractMessage(taskCtx plugin.SubTaskContext) errors.Error {
@@ -80,8 +84,9 @@ func ExtractMessage(taskCtx plugin.SubTaskContext) errors.Error {
 }
 
 var ExtractMessageMeta = plugin.SubTaskMeta{
-	Name:             "extractChatItem",
+	Name:             "extractMessage",
 	EntryPoint:       ExtractMessage,
 	EnabledByDefault: true,
 	Description:      "Extract raw messages data into tool layer table feishu_meeting_top_user_item",
+	Tables:           []string{RAW_MESSAGE_TABLE},
 }

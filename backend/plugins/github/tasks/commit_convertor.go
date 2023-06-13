@@ -28,12 +28,17 @@ import (
 	"reflect"
 )
 
+func init() {
+	RegisterSubtaskMeta(&ConvertCommitsMeta)
+}
+
 var ConvertCommitsMeta = plugin.SubTaskMeta{
 	Name:             "convertCommits",
 	EntryPoint:       ConvertCommits,
 	EnabledByDefault: false,
 	Description:      "Convert tool layer table github_commits into  domain layer table commits",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE},
+	Dependencies:     []*plugin.SubTaskMeta{&ConvertIssueAssigneeMeta},
 }
 
 func ConvertCommits(taskCtx plugin.SubTaskContext) errors.Error {

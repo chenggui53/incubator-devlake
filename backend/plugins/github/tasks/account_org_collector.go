@@ -29,6 +29,10 @@ import (
 	"reflect"
 )
 
+func init() {
+	RegisterSubtaskMeta(&CollectAccountOrgMeta)
+}
+
 const RAW_ACCOUNT_ORG_TABLE = "github_api_account_orgs"
 
 type SimpleAccountWithId struct {
@@ -92,4 +96,5 @@ var CollectAccountOrgMeta = plugin.SubTaskMeta{
 	EnabledByDefault: true,
 	Description:      "Collect accounts org data from Github api, does not support either timeFilter or diffSync.",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_CROSS},
+	Dependencies:     []*plugin.SubTaskMeta{&ExtractAccountsMeta},
 }

@@ -25,6 +25,10 @@ import (
 	"github.com/apache/incubator-devlake/plugins/feishu/models"
 )
 
+func init() {
+	RegisterSubtaskMeta(&ExtractChatItemMeta)
+}
+
 var _ plugin.SubTaskEntryPoint = ExtractChatItem
 
 func ExtractChatItem(taskCtx plugin.SubTaskContext) errors.Error {
@@ -55,8 +59,9 @@ func ExtractChatItem(taskCtx plugin.SubTaskContext) errors.Error {
 }
 
 var ExtractChatItemMeta = plugin.SubTaskMeta{
-	Name:             "extractChatItem",
+	Name:             "extractChat",
 	EntryPoint:       ExtractChatItem,
 	EnabledByDefault: true,
 	Description:      "Extract raw chats data into tool layer table feishu_meeting_top_user_item",
+	Tables:           []string{RAW_CHAT_TABLE},
 }

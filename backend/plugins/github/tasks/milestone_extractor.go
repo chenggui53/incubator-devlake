@@ -25,12 +25,17 @@ import (
 	"github.com/apache/incubator-devlake/plugins/github/models"
 )
 
+func init() {
+	RegisterSubtaskMeta(&ExtractMilestonesMeta)
+}
+
 var ExtractMilestonesMeta = plugin.SubTaskMeta{
 	Name:             "extractMilestones",
 	EntryPoint:       ExtractMilestones,
 	EnabledByDefault: true,
 	Description:      "Extract raw milestone data into tool layer table github_milestones",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_TICKET},
+	Dependencies:     []*plugin.SubTaskMeta{&CollectMilestonesMeta},
 }
 
 type MilestonesResponse struct {

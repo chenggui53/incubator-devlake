@@ -26,12 +26,17 @@ import (
 	"github.com/apache/incubator-devlake/plugins/github/models"
 )
 
+func init() {
+	RegisterSubtaskMeta(&ExtractApiCommitStatsMeta)
+}
+
 var ExtractApiCommitStatsMeta = plugin.SubTaskMeta{
 	Name:             "extractApiCommitStats",
 	EntryPoint:       ExtractApiCommitStats,
 	EnabledByDefault: false,
 	Description:      "Extract raw commit stats data into tool layer table github_commit_stats",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE},
+	Dependencies:     []*plugin.SubTaskMeta{&CollectApiCommitStatsMeta},
 }
 
 type ApiSingleCommitResponse struct {

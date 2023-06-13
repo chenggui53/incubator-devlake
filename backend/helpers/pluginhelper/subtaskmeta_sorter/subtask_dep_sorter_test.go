@@ -85,13 +85,13 @@ func Test_topologicalSort(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := topologicalSort(tt.args.metas)
+			got, err := dependenciesTopologicalSort(tt.args.metas)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("topologicalSort() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("dependenciesTopologicalSort() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("topologicalSort() got = %v, want %v", got, tt.want)
+				t.Errorf("dependenciesTopologicalSort() got = %v, want %v", got, tt.want)
 			}
 		})
 	}

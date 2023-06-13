@@ -30,12 +30,17 @@ import (
 	"github.com/apache/incubator-devlake/plugins/github/models"
 )
 
+func init() {
+	RegisterSubtaskMeta(&ConvertIssueCommentsMeta)
+}
+
 var ConvertIssueCommentsMeta = plugin.SubTaskMeta{
 	Name:             "convertIssueComments",
 	EntryPoint:       ConvertIssueComments,
 	EnabledByDefault: true,
 	Description:      "ConvertIssueComments data from Github api",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_TICKET},
+	Dependencies:     []*plugin.SubTaskMeta{&ConvertPullRequestIssuesMeta},
 }
 
 func ConvertIssueComments(taskCtx plugin.SubTaskContext) errors.Error {

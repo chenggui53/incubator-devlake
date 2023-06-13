@@ -29,6 +29,10 @@ import (
 	"github.com/apache/incubator-devlake/plugins/feishu/apimodels"
 )
 
+func init() {
+	RegisterSubtaskMeta(&CollectMeetingTopUserItemMeta)
+}
+
 const RAW_MEETING_TOP_USER_ITEM_TABLE = "feishu_meeting_top_user_item"
 
 var _ plugin.SubTaskEntryPoint = CollectMeetingTopUserItem
@@ -83,4 +87,5 @@ var CollectMeetingTopUserItemMeta = plugin.SubTaskMeta{
 	EntryPoint:       CollectMeetingTopUserItem,
 	EnabledByDefault: true,
 	Description:      "Collect top user meeting data from Feishu api",
+	Tables:           []string{RAW_MEETING_TOP_USER_ITEM_TABLE},
 }

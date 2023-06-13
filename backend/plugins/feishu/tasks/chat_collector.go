@@ -29,6 +29,10 @@ import (
 	"github.com/apache/incubator-devlake/plugins/feishu/apimodels"
 )
 
+func init() {
+	RegisterSubtaskMeta(&CollectChatMeta)
+}
+
 const RAW_CHAT_TABLE = "feishu_chat_item"
 
 var _ plugin.SubTaskEntryPoint = CollectChat
@@ -89,4 +93,5 @@ var CollectChatMeta = plugin.SubTaskMeta{
 	EntryPoint:       CollectChat,
 	EnabledByDefault: true,
 	Description:      "Collect chats from Feishu api",
+	Tables:           []string{RAW_CHAT_TABLE},
 }

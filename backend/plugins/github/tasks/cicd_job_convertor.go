@@ -30,12 +30,17 @@ import (
 	"strings"
 )
 
+func init() {
+	RegisterSubtaskMeta(&ConvertJobsMeta)
+}
+
 var ConvertJobsMeta = plugin.SubTaskMeta{
 	Name:             "convertJobs",
 	EntryPoint:       ConvertJobs,
 	EnabledByDefault: true,
 	Description:      "Convert tool layer table github_jobs into  domain layer table cicd_tasks",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_CICD},
+	Dependencies:     []*plugin.SubTaskMeta{&ExtractJobsMeta},
 }
 
 type SimpleBranch struct {

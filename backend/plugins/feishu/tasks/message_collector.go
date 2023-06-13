@@ -30,6 +30,10 @@ import (
 	"strconv"
 )
 
+func init() {
+	RegisterSubtaskMeta(&CollectMessageMeta)
+}
+
 const RAW_MESSAGE_TABLE = "feishu_message"
 
 var _ plugin.SubTaskEntryPoint = CollectMessage
@@ -112,8 +116,9 @@ func CollectMessage(taskCtx plugin.SubTaskContext) errors.Error {
 }
 
 var CollectMessageMeta = plugin.SubTaskMeta{
-	Name:             "collectMeesage",
+	Name:             "collectMessage",
 	EntryPoint:       CollectMessage,
 	EnabledByDefault: true,
 	Description:      "Collect message from Feishu api",
+	Tables:           []string{RAW_MESSAGE_TABLE},
 }

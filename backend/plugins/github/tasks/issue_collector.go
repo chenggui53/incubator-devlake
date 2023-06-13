@@ -28,6 +28,10 @@ import (
 	helper "github.com/apache/incubator-devlake/helpers/pluginhelper/api"
 )
 
+func init() {
+	RegisterSubtaskMeta(&CollectApiIssuesMeta)
+}
+
 const RAW_ISSUE_TABLE = "github_api_issues"
 
 var CollectApiIssuesMeta = plugin.SubTaskMeta{
@@ -36,6 +40,7 @@ var CollectApiIssuesMeta = plugin.SubTaskMeta{
 	EnabledByDefault: true,
 	Description:      "Collect issues data from Github api, supports both timeFilter and diffSync.",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_TICKET},
+	Dependencies:     []*plugin.SubTaskMeta{},
 }
 
 func CollectApiIssues(taskCtx plugin.SubTaskContext) errors.Error {

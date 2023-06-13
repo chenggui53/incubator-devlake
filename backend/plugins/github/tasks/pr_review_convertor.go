@@ -29,12 +29,17 @@ import (
 	"reflect"
 )
 
+func init() {
+	RegisterSubtaskMeta(&ConvertPullRequestReviewsMeta)
+}
+
 var ConvertPullRequestReviewsMeta = plugin.SubTaskMeta{
 	Name:             "convertPullRequestReviews",
 	EntryPoint:       ConvertPullRequestReviews,
 	EnabledByDefault: true,
 	Description:      "ConvertPullRequestReviews data from Github api",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE_REVIEW},
+	Dependencies:     []*plugin.SubTaskMeta{&ConvertPullRequestsMeta},
 }
 
 func ConvertPullRequestReviews(taskCtx plugin.SubTaskContext) errors.Error {
