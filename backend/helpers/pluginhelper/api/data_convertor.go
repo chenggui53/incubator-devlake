@@ -45,7 +45,7 @@ type DataConverterArgs struct {
 	BatchSize    int
 }
 
-// DataConverter helps you convert Data from Tool Layer DependencyTables to Domain Layer DependencyTables
+// DataConverter helps you convert Data from Tool Layer Tables to Domain Layer Tables
 // It reads rows from specified Iterator, and feed it into `Converter` handler
 // you can return arbitrary domain layer entities from this handler, ApiConverter would
 // first delete old data by their RawDataOrigin information, and then perform a
@@ -73,8 +73,8 @@ func NewDataConverter(args DataConverterArgs) (*DataConverter, errors.Error) {
 }
 
 // Execute function implements Subtask interface.
-// It loads data from Tool Layer DependencyTables using `Ctx.GetDal()`, convert Data using `converter.args.Convert` handler
-// Then save data to Domain Layer DependencyTables using BatchSaveDivider
+// It loads data from Tool Layer Tables using `Ctx.GetDal()`, convert Data using `converter.args.Convert` handler
+// Then save data to Domain Layer Tables using BatchSaveDivider
 func (converter *DataConverter) Execute() errors.Error {
 	// load data from database
 	db := converter.args.Ctx.GetDal()
