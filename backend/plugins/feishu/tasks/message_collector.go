@@ -120,5 +120,5 @@ var CollectMessageMeta = plugin.SubTaskMeta{
 	EntryPoint:       CollectMessage,
 	EnabledByDefault: true,
 	Description:      "Collect message from Feishu api",
-	Tables:           []string{RAW_MESSAGE_TABLE},
+	DependencyTables: []string{RAW_MESSAGE_TABLE},
 }

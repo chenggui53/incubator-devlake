@@ -36,12 +36,12 @@ func init() {
 }
 
 var ConvertRunsMeta = plugin.SubTaskMeta{
-	Name:             "convertRuns",
-	EntryPoint:       ConvertRuns,
-	EnabledByDefault: true,
-	Description:      "Convert tool layer table github_runs into  domain layer table cicd_pipeline",
-	DomainTypes:      []string{plugin.DOMAIN_TYPE_CICD},
-	Dependencies:     []*plugin.SubTaskMeta{&ExtractRunsMeta},
+	Name:                   "convertRuns",
+	EntryPoint:             ConvertRuns,
+	EnabledByDefault:       true,
+	Description:            "Convert tool layer table github_runs into  domain layer table cicd_pipeline",
+	DomainTypes:            []string{plugin.DOMAIN_TYPE_CICD},
+	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ExtractRunsMeta},
 }
 
 func ConvertRuns(taskCtx plugin.SubTaskContext) errors.Error {

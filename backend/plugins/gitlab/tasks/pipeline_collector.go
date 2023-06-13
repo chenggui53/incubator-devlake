@@ -34,12 +34,12 @@ func init() {
 const RAW_PIPELINE_TABLE = "gitlab_api_pipeline"
 
 var CollectApiPipelinesMeta = plugin.SubTaskMeta{
-	Name:             "collectApiPipelines",
-	EntryPoint:       CollectApiPipelines,
-	EnabledByDefault: true,
-	Description:      "Collect pipeline data from gitlab api, supports both timeFilter and diffSync.",
-	DomainTypes:      []string{plugin.DOMAIN_TYPE_CICD},
-	Dependencies:     []*plugin.SubTaskMeta{&ExtractApiMrCommitsMeta},
+	Name:                   "collectApiPipelines",
+	EntryPoint:             CollectApiPipelines,
+	EnabledByDefault:       true,
+	Description:            "Collect pipeline data from gitlab api, supports both timeFilter and diffSync.",
+	DomainTypes:            []string{plugin.DOMAIN_TYPE_CICD},
+	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ExtractApiMrCommitsMeta},
 }
 
 func CollectApiPipelines(taskCtx plugin.SubTaskContext) errors.Error {

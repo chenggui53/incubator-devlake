@@ -31,12 +31,12 @@ func init() {
 }
 
 var ExtractAccountsMeta = plugin.SubTaskMeta{
-	Name:             "extractAccounts",
-	EntryPoint:       ExtractAccounts,
-	EnabledByDefault: true,
-	Description:      "Extract raw account data  into tool layer table github_accounts",
-	DomainTypes:      []string{plugin.DOMAIN_TYPE_CROSS},
-	Dependencies:     []*plugin.SubTaskMeta{&CollectAccountsMeta},
+	Name:                   "extractAccounts",
+	EntryPoint:             ExtractAccounts,
+	EnabledByDefault:       true,
+	Description:            "Extract raw account data  into tool layer table github_accounts",
+	DomainTypes:            []string{plugin.DOMAIN_TYPE_CROSS},
+	DependencySubTaskMetas: []*plugin.SubTaskMeta{&CollectAccountsMeta},
 }
 
 type DetailGithubAccountResponse struct {

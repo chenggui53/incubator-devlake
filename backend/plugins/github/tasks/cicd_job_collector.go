@@ -38,12 +38,12 @@ func init() {
 const RAW_JOB_TABLE = "github_api_jobs"
 
 var CollectJobsMeta = plugin.SubTaskMeta{
-	Name:             "collectJobs",
-	EntryPoint:       CollectJobs,
-	EnabledByDefault: true,
-	Description:      "Collect Jobs data from Github action api, supports both timeFilter and diffSync.",
-	DomainTypes:      []string{plugin.DOMAIN_TYPE_CICD},
-	Dependencies:     []*plugin.SubTaskMeta{&ConvertRunsMeta},
+	Name:                   "collectJobs",
+	EntryPoint:             CollectJobs,
+	EnabledByDefault:       true,
+	Description:            "Collect Jobs data from Github action api, supports both timeFilter and diffSync.",
+	DomainTypes:            []string{plugin.DOMAIN_TYPE_CICD},
+	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ConvertRunsMeta},
 }
 
 func CollectJobs(taskCtx plugin.SubTaskContext) errors.Error {

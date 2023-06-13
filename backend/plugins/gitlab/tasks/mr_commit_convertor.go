@@ -33,12 +33,12 @@ func init() {
 }
 
 var ConvertApiMrCommitsMeta = plugin.SubTaskMeta{
-	Name:             "convertApiMergeRequestsCommits",
-	EntryPoint:       ConvertApiMergeRequestsCommits,
-	EnabledByDefault: true,
-	Description:      "Add domain layer PullRequestCommit according to GitlabMrCommit",
-	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE_REVIEW},
-	Dependencies:     []*plugin.SubTaskMeta{&ConvertMrCommentMeta},
+	Name:                   "convertApiMergeRequestsCommits",
+	EntryPoint:             ConvertApiMergeRequestsCommits,
+	EnabledByDefault:       true,
+	Description:            "Add domain layer PullRequestCommit according to GitlabMrCommit",
+	DomainTypes:            []string{plugin.DOMAIN_TYPE_CODE_REVIEW},
+	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ConvertMrCommentMeta},
 }
 
 func ConvertApiMergeRequestsCommits(taskCtx plugin.SubTaskContext) errors.Error {

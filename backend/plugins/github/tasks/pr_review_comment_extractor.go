@@ -40,8 +40,8 @@ var ExtractApiPrReviewCommentsMeta = plugin.SubTaskMeta{
 	EnabledByDefault: true,
 	Description: "Extract raw comment data  into tool layer table github_pull_request_comments" +
 		"and github_issue_comments",
-	DomainTypes:  []string{plugin.DOMAIN_TYPE_CROSS, plugin.DOMAIN_TYPE_CODE_REVIEW},
-	Dependencies: []*plugin.SubTaskMeta{&CollectApiPrReviewCommentsMeta},
+	DomainTypes:            []string{plugin.DOMAIN_TYPE_CROSS, plugin.DOMAIN_TYPE_CODE_REVIEW},
+	DependencySubTaskMetas: []*plugin.SubTaskMeta{&CollectApiPrReviewCommentsMeta},
 }
 
 func ExtractApiPrReviewComments(taskCtx plugin.SubTaskContext) errors.Error {

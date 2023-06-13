@@ -20,6 +20,7 @@ package subtaskmeta_sorter
 import (
 	"fmt"
 	"github.com/apache/incubator-devlake/core/plugin"
+	"sort"
 )
 
 type TableSorter struct {
@@ -31,7 +32,7 @@ func NewTableSorter(metas []*plugin.SubTaskMeta) SubTaskMetaSorter {
 }
 
 func (d *TableSorter) Sort() ([]plugin.SubTaskMeta, error) {
-	return dbTableTopologicalSort(d.metas)
+	return dependencyTableTopologicalSort(d.metas)
 }
 
 const (
@@ -48,7 +49,7 @@ func genClassNameByMetaName(rawName string) (string, error) {
 }
 
 // stable topological sort
-func dbTableTopologicalSort(metas []*plugin.SubTaskMeta) ([]plugin.SubTaskMeta, error) {
+func dependencyTableTopologicalSort(metas []*plugin.SubTaskMeta) ([]plugin.SubTaskMeta, error) {
 	// TODO 1. can i use reflect to realize collect, extractor, converter ?
 	// first process same class data
 	// suppose different class has no dependency relation
@@ -56,34 +57,42 @@ func dbTableTopologicalSort(metas []*plugin.SubTaskMeta) ([]plugin.SubTaskMeta, 
 	// sort different metas
 	// add list by convert and
 
-	// 1. construct data
-	subtaskMap := make(map[string][]*plugin.SubTaskMeta)       // use subtask class name to get metalist
-	subtaskTableMap := make(map[string][]string)               // use class name get meta name list
-	subtaskMetaNameMap := make(map[string]*plugin.SubTaskMeta) // use name to get meta
+	// 1. construct data to sort
+	classNameToSubtaskListMap := make(map[string][]*plugin.SubTaskMeta) // use subtask class name to get meta list
+	classNameToTableListMap := make(map[string][]string)                // use class name get meta name list
+	subtaskNameToDataMap := make(map[string]*plugin.SubTaskMeta)        // use name to get meta
+
 	for _, metaItem := range metas {
 		taskClassName, err := genClassNameByMetaName(metaItem.Name)
 		if err != nil {
 			return nil, err
 		}
-		if value, ok := subtaskMap[taskClassName]; ok {
-			subtaskMap[taskClassName] = append(value, metaItem)
+		if value, ok := classNameToSubtaskListMap[taskClassName]; ok {
+			classNameToSubtaskListMap[taskClassName] = append(value, metaItem)
 		} else {
-			subtaskMap[taskClassName] = []*plugin.SubTaskMeta{metaItem}
+			classNameToSubtaskListMap[taskClassName] = []*plugin.SubTaskMeta{metaItem}
 		}
-		if value, ok := subtaskTableMap[taskClassName]; ok {
+		if value, ok := classNameToTableListMap[taskClassName]; ok {
 			// check if subtask in one class has different tables define
-			if len(value) != len(metaItem.Tables) {
+			if len(value) != len(metaItem.DependencyTables) {
 				return nil, fmt.Errorf("got different table list in class %s", taskClassName)
 			}
-			// TODO check list item in value and metaItem.Tables, make sure it's equal
+			// check list item in value and metaItem.DependencyTables, make sure it's equal
+			sort.Strings(value)
+			sort.Strings(metaItem.DependencyTables)
+			for index, valueItem := range value {
+				if valueItem != metaItem.DependencyTables[index] {
+					return nil, fmt.Errorf("got different table list in class %s", taskClassName)
+				}
+			}
 		} else {
-			subtaskTableMap[taskClassName] = metaItem.Tables
+			classNameToTableListMap[taskClassName] = metaItem.DependencyTables
 		}
-		subtaskMetaNameMap[metaItem.Name] = metaItem
+		subtaskNameToDataMap[metaItem.Name] = metaItem
 	}
 
 	// 2. sort
-	sortedNameList, err := topologicalSortDifferentElements(subtaskTableMap)
+	sortedNameList, err := topologicalSortDifferentElements(classNameToTableListMap)
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +100,7 @@ func dbTableTopologicalSort(metas []*plugin.SubTaskMeta) ([]plugin.SubTaskMeta, 
 	// 3. gen subtaskmeta list by sorted data and return
 	sortedSubtaskMetaList := make([]plugin.SubTaskMeta, 0)
 	for _, nameItem := range sortedNameList {
-		value, ok := subtaskMap[nameItem]
+		value, ok := classNameToSubtaskListMap[nameItem]
 		if !ok {
 			return nil, fmt.Errorf("failed get subtask list by class name = %s", nameItem)
 		}

@@ -34,12 +34,12 @@ func init() {
 }
 
 var ConvertAccountsMeta = plugin.SubTaskMeta{
-	Name:             "convertAccounts",
-	EntryPoint:       ConvertAccounts,
-	EnabledByDefault: true,
-	Description:      "Convert tool layer table gitlab_users into  domain layer table accounts",
-	DomainTypes:      []string{plugin.DOMAIN_TYPE_CROSS},
-	Dependencies:     []*plugin.SubTaskMeta{&ExtractAccountsMeta},
+	Name:                   "convertAccounts",
+	EntryPoint:             ConvertAccounts,
+	EnabledByDefault:       true,
+	Description:            "Convert tool layer table gitlab_users into  domain layer table accounts",
+	DomainTypes:            []string{plugin.DOMAIN_TYPE_CROSS},
+	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ExtractAccountsMeta},
 }
 
 func ConvertAccounts(taskCtx plugin.SubTaskContext) errors.Error {

@@ -37,12 +37,12 @@ func init() {
 const RAW_USER_TABLE = "gitlab_api_users"
 
 var CollectAccountsMeta = plugin.SubTaskMeta{
-	Name:             "collectAccounts",
-	EntryPoint:       CollectAccounts,
-	EnabledByDefault: true,
-	Description:      "collect gitlab users, does not support either timeFilter or diffSync.",
-	DomainTypes:      []string{plugin.DOMAIN_TYPE_CROSS},
-	Dependencies:     []*plugin.SubTaskMeta{&EnrichMergeRequestsMeta},
+	Name:                   "collectAccounts",
+	EntryPoint:             CollectAccounts,
+	EnabledByDefault:       true,
+	Description:            "collect gitlab users, does not support either timeFilter or diffSync.",
+	DomainTypes:            []string{plugin.DOMAIN_TYPE_CROSS},
+	DependencySubTaskMetas: []*plugin.SubTaskMeta{&EnrichMergeRequestsMeta},
 }
 
 func CollectAccounts(taskCtx plugin.SubTaskContext) errors.Error {

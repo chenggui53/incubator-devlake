@@ -32,12 +32,12 @@ func init() {
 }
 
 var ExtractApiPipelineDetailsMeta = plugin.SubTaskMeta{
-	Name:             "extractApiPipelineDetails",
-	EntryPoint:       ExtractApiPipelineDetails,
-	EnabledByDefault: true,
-	Description:      "Extract raw pipeline details data into tool layer table GitlabPipeline",
-	DomainTypes:      []string{plugin.DOMAIN_TYPE_CICD},
-	Dependencies:     []*plugin.SubTaskMeta{&CollectApiPipelineDetailsMeta},
+	Name:                   "extractApiPipelineDetails",
+	EntryPoint:             ExtractApiPipelineDetails,
+	EnabledByDefault:       true,
+	Description:            "Extract raw pipeline details data into tool layer table GitlabPipeline",
+	DomainTypes:            []string{plugin.DOMAIN_TYPE_CICD},
+	DependencySubTaskMetas: []*plugin.SubTaskMeta{&CollectApiPipelineDetailsMeta},
 }
 
 func ExtractApiPipelineDetails(taskCtx plugin.SubTaskContext) errors.Error {

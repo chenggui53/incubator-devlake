@@ -33,12 +33,12 @@ func init() {
 }
 
 var ExtractJobsMeta = plugin.SubTaskMeta{
-	Name:             "extractJobs",
-	EntryPoint:       ExtractJobs,
-	EnabledByDefault: true,
-	Description:      "Extract raw run data into tool layer table github_jobs",
-	DomainTypes:      []string{plugin.DOMAIN_TYPE_CICD},
-	Dependencies:     []*plugin.SubTaskMeta{&CollectJobsMeta},
+	Name:                   "extractJobs",
+	EntryPoint:             ExtractJobs,
+	EnabledByDefault:       true,
+	Description:            "Extract raw run data into tool layer table github_jobs",
+	DomainTypes:            []string{plugin.DOMAIN_TYPE_CICD},
+	DependencySubTaskMetas: []*plugin.SubTaskMeta{&CollectJobsMeta},
 }
 
 func ExtractJobs(taskCtx plugin.SubTaskContext) errors.Error {

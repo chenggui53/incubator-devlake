@@ -30,12 +30,12 @@ func init() {
 const RAW_MERGE_REQUEST_COMMITS_TABLE = "gitlab_api_merge_request_commits"
 
 var CollectApiMrCommitsMeta = plugin.SubTaskMeta{
-	Name:             "collectApiMergeRequestsCommits",
-	EntryPoint:       CollectApiMergeRequestsCommits,
-	EnabledByDefault: true,
-	Description:      "Collect merge requests commits data from gitlab api, supports timeFilter but not diffSync.",
-	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE_REVIEW},
-	Dependencies:     []*plugin.SubTaskMeta{&ExtractApiMrNotesMeta},
+	Name:                   "collectApiMergeRequestsCommits",
+	EntryPoint:             CollectApiMergeRequestsCommits,
+	EnabledByDefault:       true,
+	Description:            "Collect merge requests commits data from gitlab api, supports timeFilter but not diffSync.",
+	DomainTypes:            []string{plugin.DOMAIN_TYPE_CODE_REVIEW},
+	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ExtractApiMrNotesMeta},
 }
 
 func CollectApiMergeRequestsCommits(taskCtx plugin.SubTaskContext) errors.Error {

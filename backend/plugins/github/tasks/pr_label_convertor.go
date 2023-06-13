@@ -33,12 +33,12 @@ func init() {
 }
 
 var ConvertPullRequestLabelsMeta = plugin.SubTaskMeta{
-	Name:             "convertPullRequestLabels",
-	EntryPoint:       ConvertPullRequestLabels,
-	EnabledByDefault: true,
-	Description:      "Convert tool layer table github_pull_request_labels into  domain layer table pull_request_labels",
-	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE_REVIEW},
-	Dependencies:     []*plugin.SubTaskMeta{&ConvertPullRequestReviewsMeta},
+	Name:                   "convertPullRequestLabels",
+	EntryPoint:             ConvertPullRequestLabels,
+	EnabledByDefault:       true,
+	Description:            "Convert tool layer table github_pull_request_labels into  domain layer table pull_request_labels",
+	DomainTypes:            []string{plugin.DOMAIN_TYPE_CODE_REVIEW},
+	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ConvertPullRequestReviewsMeta},
 }
 
 func ConvertPullRequestLabels(taskCtx plugin.SubTaskContext) errors.Error {

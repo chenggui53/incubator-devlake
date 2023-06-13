@@ -35,12 +35,12 @@ func init() {
 }
 
 var ConvertApiMergeRequestsMeta = plugin.SubTaskMeta{
-	Name:             "convertApiMergeRequests",
-	EntryPoint:       ConvertApiMergeRequests,
-	EnabledByDefault: true,
-	Description:      "Add domain layer PullRequest according to GitlabMergeRequest",
-	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE_REVIEW},
-	Dependencies:     []*plugin.SubTaskMeta{&ConvertProjectMeta},
+	Name:                   "convertApiMergeRequests",
+	EntryPoint:             ConvertApiMergeRequests,
+	EnabledByDefault:       true,
+	Description:            "Add domain layer PullRequest according to GitlabMergeRequest",
+	DomainTypes:            []string{plugin.DOMAIN_TYPE_CODE_REVIEW},
+	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ConvertProjectMeta},
 }
 
 func ConvertApiMergeRequests(taskCtx plugin.SubTaskContext) errors.Error {

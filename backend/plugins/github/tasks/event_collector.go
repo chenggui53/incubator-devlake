@@ -45,12 +45,12 @@ type SimpleGithubApiEvents struct {
 }
 
 var CollectApiEventsMeta = plugin.SubTaskMeta{
-	Name:             "collectApiEvents",
-	EntryPoint:       CollectApiEvents,
-	EnabledByDefault: true,
-	Description:      "Collect Events data from Github api, supports both timeFilter and diffSync.",
-	DomainTypes:      []string{plugin.DOMAIN_TYPE_TICKET},
-	Dependencies:     []*plugin.SubTaskMeta{&ExtractApiCommentsMeta},
+	Name:                   "collectApiEvents",
+	EntryPoint:             CollectApiEvents,
+	EnabledByDefault:       true,
+	Description:            "Collect Events data from Github api, supports both timeFilter and diffSync.",
+	DomainTypes:            []string{plugin.DOMAIN_TYPE_TICKET},
+	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ExtractApiCommentsMeta},
 }
 
 func CollectApiEvents(taskCtx plugin.SubTaskContext) errors.Error {

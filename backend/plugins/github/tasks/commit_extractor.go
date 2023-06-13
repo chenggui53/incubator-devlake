@@ -30,12 +30,12 @@ func init() {
 }
 
 var ExtractApiCommitsMeta = plugin.SubTaskMeta{
-	Name:             "extractApiCommits",
-	EntryPoint:       ExtractApiCommits,
-	EnabledByDefault: false,
-	Description:      "Extract raw commit data into tool layer table github_commits",
-	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE},
-	Dependencies:     []*plugin.SubTaskMeta{&CollectApiCommitsMeta},
+	Name:                   "extractApiCommits",
+	EntryPoint:             ExtractApiCommits,
+	EnabledByDefault:       false,
+	Description:            "Extract raw commit data into tool layer table github_commits",
+	DomainTypes:            []string{plugin.DOMAIN_TYPE_CODE},
+	DependencySubTaskMetas: []*plugin.SubTaskMeta{&CollectApiCommitsMeta},
 }
 
 type CommitsResponse struct {

@@ -88,5 +88,5 @@ var ExtractMessageMeta = plugin.SubTaskMeta{
 	EntryPoint:       ExtractMessage,
 	EnabledByDefault: true,
 	Description:      "Extract raw messages data into tool layer table feishu_meeting_top_user_item",
-	Tables:           []string{RAW_MESSAGE_TABLE},
+	DependencyTables: []string{RAW_MESSAGE_TABLE},
 }

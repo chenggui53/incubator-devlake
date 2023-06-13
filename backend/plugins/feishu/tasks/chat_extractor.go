@@ -63,5 +63,5 @@ var ExtractChatItemMeta = plugin.SubTaskMeta{
 	EntryPoint:       ExtractChatItem,
 	EnabledByDefault: true,
 	Description:      "Extract raw chats data into tool layer table feishu_meeting_top_user_item",
-	Tables:           []string{RAW_CHAT_TABLE},
+	DependencyTables: []string{RAW_CHAT_TABLE},
 }

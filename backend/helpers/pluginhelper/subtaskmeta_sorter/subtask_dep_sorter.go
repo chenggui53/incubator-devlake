@@ -47,9 +47,9 @@ func dependenciesTopologicalSort(metas []*plugin.SubTaskMeta) ([]plugin.SubTaskM
 		}
 
 		if _, ok := dependenciesMap[item.Name]; !ok {
-			if len(item.Dependencies) != 0 {
+			if len(item.DependencySubTaskMetas) != 0 {
 				dependenciesMap[item.Name] = make([]string, 0)
-				for _, dependencyItem := range item.Dependencies {
+				for _, dependencyItem := range item.DependencySubTaskMetas {
 					dependenciesMap[item.Name] = append(dependenciesMap[item.Name], dependencyItem.Name)
 				}
 			} else {

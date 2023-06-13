@@ -87,5 +87,5 @@ var CollectMeetingTopUserItemMeta = plugin.SubTaskMeta{
 	EntryPoint:       CollectMeetingTopUserItem,
 	EnabledByDefault: true,
 	Description:      "Collect top user meeting data from Feishu api",
-	Tables:           []string{RAW_MEETING_TOP_USER_ITEM_TABLE},
+	DependencyTables: []string{RAW_MEETING_TOP_USER_ITEM_TABLE},
 }

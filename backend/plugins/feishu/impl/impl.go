@@ -38,6 +38,7 @@ var _ plugin.PluginApi = (*Feishu)(nil)
 var _ plugin.PluginModel = (*Feishu)(nil)
 var _ plugin.PluginMigration = (*Feishu)(nil)
 var _ plugin.CloseablePluginTask = (*Feishu)(nil)
+
 var sortedSubtaskPlugins []plugin.SubTaskMeta
 
 func init() {

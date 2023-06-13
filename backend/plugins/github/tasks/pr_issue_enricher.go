@@ -35,12 +35,12 @@ func init() {
 }
 
 var EnrichPullRequestIssuesMeta = plugin.SubTaskMeta{
-	Name:             "enrichPullRequestIssues",
-	EntryPoint:       EnrichPullRequestIssues,
-	EnabledByDefault: true,
-	Description:      "Create tool layer table github_pull_request_issues from github_pull_reqeusts",
-	DomainTypes:      []string{plugin.DOMAIN_TYPE_CROSS},
-	Dependencies:     []*plugin.SubTaskMeta{&ConvertJobsMeta},
+	Name:                   "enrichPullRequestIssues",
+	EntryPoint:             EnrichPullRequestIssues,
+	EnabledByDefault:       true,
+	Description:            "Create tool layer table github_pull_request_issues from github_pull_reqeusts",
+	DomainTypes:            []string{plugin.DOMAIN_TYPE_CROSS},
+	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ConvertJobsMeta},
 }
 
 func EnrichPullRequestIssues(taskCtx plugin.SubTaskContext) (err errors.Error) {

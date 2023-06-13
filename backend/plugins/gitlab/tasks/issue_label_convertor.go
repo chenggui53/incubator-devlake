@@ -33,12 +33,12 @@ func init() {
 }
 
 var ConvertIssueLabelsMeta = plugin.SubTaskMeta{
-	Name:             "convertIssueLabels",
-	EntryPoint:       ConvertIssueLabels,
-	EnabledByDefault: true,
-	Description:      "Convert tool layer table gitlab_issue_labels into  domain layer table issue_labels",
-	DomainTypes:      []string{plugin.DOMAIN_TYPE_TICKET},
-	Dependencies:     []*plugin.SubTaskMeta{&ConvertIssuesMeta},
+	Name:                   "convertIssueLabels",
+	EntryPoint:             ConvertIssueLabels,
+	EnabledByDefault:       true,
+	Description:            "Convert tool layer table gitlab_issue_labels into  domain layer table issue_labels",
+	DomainTypes:            []string{plugin.DOMAIN_TYPE_TICKET},
+	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ConvertIssuesMeta},
 }
 
 func ConvertIssueLabels(taskCtx plugin.SubTaskContext) errors.Error {

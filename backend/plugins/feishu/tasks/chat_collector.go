@@ -93,5 +93,5 @@ var CollectChatMeta = plugin.SubTaskMeta{
 	EntryPoint:       CollectChat,
 	EnabledByDefault: true,
 	Description:      "Collect chats from Feishu api",
-	Tables:           []string{RAW_CHAT_TABLE},
+	DependencyTables: []string{RAW_CHAT_TABLE},
 }

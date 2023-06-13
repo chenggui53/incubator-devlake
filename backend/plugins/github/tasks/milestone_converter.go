@@ -35,12 +35,12 @@ func init() {
 }
 
 var ConvertMilestonesMeta = plugin.SubTaskMeta{
-	Name:             "convertMilestones",
-	EntryPoint:       ConvertMilestones,
-	EnabledByDefault: true,
-	Description:      "Convert tool layer table github_milestones into  domain layer table milestones",
-	DomainTypes:      []string{plugin.DOMAIN_TYPE_TICKET},
-	Dependencies:     []*plugin.SubTaskMeta{&ConvertPullRequestCommentsMeta},
+	Name:                   "convertMilestones",
+	EntryPoint:             ConvertMilestones,
+	EnabledByDefault:       true,
+	Description:            "Convert tool layer table github_milestones into  domain layer table milestones",
+	DomainTypes:            []string{plugin.DOMAIN_TYPE_TICKET},
+	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ConvertPullRequestCommentsMeta},
 }
 
 type MilestoneConverterModel struct {

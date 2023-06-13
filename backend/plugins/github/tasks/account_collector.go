@@ -91,10 +91,10 @@ func CollectAccounts(taskCtx plugin.SubTaskContext) errors.Error {
 }
 
 var CollectAccountsMeta = plugin.SubTaskMeta{
-	Name:             "collectAccounts",
-	EntryPoint:       CollectAccounts,
-	EnabledByDefault: true,
-	Description:      "Collect accounts data from Github api, does not support either timeFilter or diffSync.",
-	DomainTypes:      []string{plugin.DOMAIN_TYPE_CROSS},
-	Dependencies:     []*plugin.SubTaskMeta{&ExtractMilestonesMeta},
+	Name:                   "collectAccounts",
+	EntryPoint:             CollectAccounts,
+	EnabledByDefault:       true,
+	Description:            "Collect accounts data from Github api, does not support either timeFilter or diffSync.",
+	DomainTypes:            []string{plugin.DOMAIN_TYPE_CROSS},
+	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ExtractMilestonesMeta},
 }

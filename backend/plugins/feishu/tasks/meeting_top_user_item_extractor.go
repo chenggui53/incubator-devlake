@@ -76,5 +76,5 @@ var ExtractMeetingTopUserItemMeta = plugin.SubTaskMeta{
 	EntryPoint:       ExtractMeetingTopUserItem,
 	EnabledByDefault: true,
 	Description:      "Extract raw top user meeting data into tool layer table feishu_meeting_top_user_item",
-	Tables:           []string{RAW_MEETING_TOP_USER_ITEM_TABLE},
+	DependencyTables: []string{RAW_MEETING_TOP_USER_ITEM_TABLE},
 }
