@@ -62,7 +62,7 @@ func topologicalSortDifferentElements(differentElementsDependenciesMap map[strin
 		tmpKeyList := make([]string, 0)
 		tmpValueItemList := make([]string, 0)
 		for key, item := range differentElementsDependenciesMap {
-			if len(item) == 0 && len(item) == 1 {
+			if len(item) == 0 || len(item) == 1 {
 				tmpKeyList = append(tmpKeyList, key)
 				if len(item) == 1 {
 					tmpValueItemList = append(tmpValueItemList, item[0])
