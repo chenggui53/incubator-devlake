@@ -19,6 +19,7 @@ package tasks
 
 import (
 	"encoding/json"
+
 	"github.com/apache/incubator-devlake/core/errors"
 	"github.com/apache/incubator-devlake/core/plugin"
 	"github.com/apache/incubator-devlake/helpers/pluginhelper/api"
@@ -55,7 +56,7 @@ func ExtractChatItem(taskCtx plugin.SubTaskContext) errors.Error {
 }
 
 var ExtractChatItemMeta = plugin.SubTaskMeta{
-	Name:             "extractChatItem",
+	Name:             "extractChat",
 	EntryPoint:       ExtractChatItem,
 	EnabledByDefault: true,
 	Description:      "Extract raw chats data into tool layer table feishu_meeting_top_user_item",

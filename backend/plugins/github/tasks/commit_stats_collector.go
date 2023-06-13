@@ -32,6 +32,10 @@ import (
 	"github.com/apache/incubator-devlake/plugins/github/models"
 )
 
+func init() {
+	RegisterSubtaskMeta(&CollectApiCommitStatsMeta)
+}
+
 const RAW_COMMIT_STATS_TABLE = "github_api_commit_stats"
 
 var CollectApiCommitStatsMeta = plugin.SubTaskMeta{
@@ -40,6 +44,7 @@ var CollectApiCommitStatsMeta = plugin.SubTaskMeta{
 	EnabledByDefault: false,
 	Description:      "Collect commitStats data from Github api, does not support either timeFilter or diffSync.",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE},
+	Dependencies:     []*plugin.SubTaskMeta{&ExtractApiCommitsMeta},
 }
 
 func CollectApiCommitStats(taskCtx plugin.SubTaskContext) errors.Error {

@@ -19,15 +19,16 @@ package tasks
 
 import (
 	"encoding/json"
+	"net/http"
+	"net/url"
+	"reflect"
+	"strconv"
+
 	"github.com/apache/incubator-devlake/core/dal"
 	"github.com/apache/incubator-devlake/core/errors"
 	"github.com/apache/incubator-devlake/core/plugin"
 	"github.com/apache/incubator-devlake/helpers/pluginhelper/api"
 	"github.com/apache/incubator-devlake/plugins/feishu/apimodels"
-	"net/http"
-	"net/url"
-	"reflect"
-	"strconv"
 )
 
 const RAW_MESSAGE_TABLE = "feishu_message"
@@ -112,7 +113,7 @@ func CollectMessage(taskCtx plugin.SubTaskContext) errors.Error {
 }
 
 var CollectMessageMeta = plugin.SubTaskMeta{
-	Name:             "collectMeesage",
+	Name:             "collectMessage",
 	EntryPoint:       CollectMessage,
 	EnabledByDefault: true,
 	Description:      "Collect message from Feishu api",

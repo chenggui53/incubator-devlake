@@ -19,13 +19,14 @@ package tasks
 
 import (
 	"encoding/json"
+	"strconv"
+	"time"
+
 	"github.com/apache/incubator-devlake/core/errors"
 	"github.com/apache/incubator-devlake/core/plugin"
 	"github.com/apache/incubator-devlake/helpers/pluginhelper/api"
 	"github.com/apache/incubator-devlake/plugins/feishu/apimodels"
 	"github.com/apache/incubator-devlake/plugins/feishu/models"
-	"strconv"
-	"time"
 )
 
 var _ plugin.SubTaskEntryPoint = ExtractMessage
@@ -80,7 +81,7 @@ func ExtractMessage(taskCtx plugin.SubTaskContext) errors.Error {
 }
 
 var ExtractMessageMeta = plugin.SubTaskMeta{
-	Name:             "extractChatItem",
+	Name:             "extractMessage",
 	EntryPoint:       ExtractMessage,
 	EnabledByDefault: true,
 	Description:      "Extract raw messages data into tool layer table feishu_meeting_top_user_item",

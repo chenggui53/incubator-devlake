@@ -33,6 +33,10 @@ import (
 	"github.com/apache/incubator-devlake/plugins/github/models"
 )
 
+func init() {
+	RegisterSubtaskMeta(&CollectApiPullRequestsMeta)
+}
+
 const RAW_PULL_REQUEST_TABLE = "github_api_pull_requests"
 
 var CollectApiPullRequestsMeta = plugin.SubTaskMeta{
@@ -41,6 +45,7 @@ var CollectApiPullRequestsMeta = plugin.SubTaskMeta{
 	EnabledByDefault: true,
 	Description:      "Collect PullRequests data from Github api, supports both timeFilter and diffSync.",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_CROSS, plugin.DOMAIN_TYPE_CODE_REVIEW},
+	Dependencies:     []*plugin.SubTaskMeta{&ExtractApiIssuesMeta},
 }
 
 type SimpleGithubPr struct {
