@@ -22,7 +22,7 @@ import (
 	"testing"
 )
 
-func Test_topologicalSorter(t *testing.T) {
+func Test_topologicalSortSameElements(t *testing.T) {
 	type args struct {
 		dependenciesMap map[string][]string
 	}
@@ -72,7 +72,7 @@ func Test_topologicalSorter(t *testing.T) {
 	}
 }
 
-func Test_topologicalSorterByDependency(t *testing.T) {
+func Test_topologicalSortDifferentElements(t *testing.T) {
 	type args struct {
 		dependenciesMap map[string][]string
 	}
