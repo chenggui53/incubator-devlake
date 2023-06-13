@@ -110,7 +110,7 @@ var CollectGitCommitMeta = plugin.SubTaskMeta{
 	Name:             "collectGitCommits",
 	EntryPoint:       CollectGitCommits,
 	EnabledByDefault: true,
-	Description:      "collect git commits into Domain Layer DependencyTables",
+	Description:      "collect git commits into Domain Layer Tables",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE, plugin.DOMAIN_TYPE_CROSS},
 }
 
@@ -118,7 +118,7 @@ var CollectGitBranchMeta = plugin.SubTaskMeta{
 	Name:             "collectGitBranches",
 	EntryPoint:       CollectGitBranches,
 	EnabledByDefault: true,
-	Description:      "collect git branch into Domain Layer DependencyTables",
+	Description:      "collect git branch into Domain Layer Tables",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE},
 }
 
@@ -126,7 +126,7 @@ var CollectGitTagMeta = plugin.SubTaskMeta{
 	Name:             "collectGitTags",
 	EntryPoint:       CollectGitTags,
 	EnabledByDefault: true,
-	Description:      "collect git tag into Domain Layer DependencyTables",
+	Description:      "collect git tag into Domain Layer Tables",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE},
 }
 
@@ -134,6 +134,6 @@ var CollectGitDiffLineMeta = plugin.SubTaskMeta{
 	Name:             "collectDiffLine",
 	EntryPoint:       CollectGitDiffLines,
 	EnabledByDefault: false,
-	Description:      "collect git commit diff line into Domain Layer DependencyTables",
+	Description:      "collect git commit diff line into Domain Layer Tables",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE},
 }
