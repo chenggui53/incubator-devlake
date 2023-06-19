@@ -35,12 +35,12 @@ func init() {
 }
 
 var ConvertIssueCommentsMeta = plugin.SubTaskMeta{
-	Name:                   "convertIssueComments",
-	EntryPoint:             ConvertIssueComments,
-	EnabledByDefault:       true,
-	Description:            "ConvertIssueComments data from Github api",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_TICKET},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ConvertPullRequestIssuesMeta},
+	Name:             "convertIssueComments",
+	EntryPoint:       ConvertIssueComments,
+	EnabledByDefault: true,
+	Description:      "ConvertIssueComments data from Github api",
+	DomainTypes:      []string{plugin.DOMAIN_TYPE_TICKET},
+	Dependencies:     []*plugin.SubTaskMeta{&ConvertPullRequestIssuesMeta},
 }
 
 func ConvertIssueComments(taskCtx plugin.SubTaskContext) errors.Error {

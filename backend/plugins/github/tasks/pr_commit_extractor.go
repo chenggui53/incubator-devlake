@@ -33,12 +33,12 @@ func init() {
 }
 
 var ExtractApiPullRequestCommitsMeta = plugin.SubTaskMeta{
-	Name:                   "extractApiPullRequestCommits",
-	EntryPoint:             ExtractApiPullRequestCommits,
-	EnabledByDefault:       true,
-	Description:            "Extract raw PullRequestCommits data into tool layer table github_commits",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_CROSS, plugin.DOMAIN_TYPE_CODE_REVIEW},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&CollectApiPullRequestCommitsMeta},
+	Name:             "extractApiPullRequestCommits",
+	EntryPoint:       ExtractApiPullRequestCommits,
+	EnabledByDefault: true,
+	Description:      "Extract raw PullRequestCommits data into tool layer table github_commits",
+	DomainTypes:      []string{plugin.DOMAIN_TYPE_CROSS, plugin.DOMAIN_TYPE_CODE_REVIEW},
+	Dependencies:     []*plugin.SubTaskMeta{&CollectApiPullRequestCommitsMeta},
 }
 
 type PrCommitsResponse struct {

@@ -130,12 +130,12 @@ func dependencyTableTopologicalSort(metas []*plugin.SubTaskMeta) ([]plugin.SubTa
 	return sortedSubtaskMetaList, nil
 }
 
-// TODO get subtask class list, different class can task concurrency
+// TODO GetSortedClassName get subtask class list, different class can task concurrency
 func GetSortedClassName() []string {
 	return nil
 }
 
-// TODO get subtask list by class name, this subtask list should run sequentially
+// TODO GetSubtaskMetasByClassName get subtask list by class name, this subtask list should run sequentially
 func GetSubtaskMetasByClassName(className string) []*plugin.SubTaskMeta {
 	return nil
 }

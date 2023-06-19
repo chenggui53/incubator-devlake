@@ -34,12 +34,12 @@ func init() {
 }
 
 var ConvertMrCommentMeta = plugin.SubTaskMeta{
-	Name:                   "convertMergeRequestComment",
-	EntryPoint:             ConvertMergeRequestComment,
-	EnabledByDefault:       true,
-	Description:            "Add domain layer Comment according to GitlabMrComment",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_CODE_REVIEW},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ConvertApiMergeRequestsMeta},
+	Name:             "convertMergeRequestComment",
+	EntryPoint:       ConvertMergeRequestComment,
+	EnabledByDefault: true,
+	Description:      "Add domain layer Comment according to GitlabMrComment",
+	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE_REVIEW},
+	Dependencies:     []*plugin.SubTaskMeta{&ConvertApiMergeRequestsMeta},
 }
 
 func ConvertMergeRequestComment(taskCtx plugin.SubTaskContext) errors.Error {

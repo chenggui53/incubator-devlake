@@ -35,12 +35,12 @@ func init() {
 }
 
 var ConvertPullRequestsMeta = plugin.SubTaskMeta{
-	Name:                   "convertPullRequests",
-	EntryPoint:             ConvertPullRequests,
-	EnabledByDefault:       true,
-	Description:            "ConvertPullRequests data from Github api",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_CROSS, plugin.DOMAIN_TYPE_CODE_REVIEW},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ConvertPullRequestCommitsMeta},
+	Name:             "convertPullRequests",
+	EntryPoint:       ConvertPullRequests,
+	EnabledByDefault: true,
+	Description:      "ConvertPullRequests data from Github api",
+	DomainTypes:      []string{plugin.DOMAIN_TYPE_CROSS, plugin.DOMAIN_TYPE_CODE_REVIEW},
+	Dependencies:     []*plugin.SubTaskMeta{&ConvertPullRequestCommitsMeta},
 }
 
 func ConvertPullRequests(taskCtx plugin.SubTaskContext) errors.Error {

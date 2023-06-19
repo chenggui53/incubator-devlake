@@ -47,12 +47,12 @@ type MergeRequestNote struct {
 }
 
 var ExtractApiMrNotesMeta = plugin.SubTaskMeta{
-	Name:                   "extractApiMergeRequestsNotes",
-	EntryPoint:             ExtractApiMergeRequestsNotes,
-	EnabledByDefault:       true,
-	Description:            "Extract raw merge requests notes data into tool layer table GitlabMrNote",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_CODE_REVIEW},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&CollectApiMrNotesMeta},
+	Name:             "extractApiMergeRequestsNotes",
+	EntryPoint:       ExtractApiMergeRequestsNotes,
+	EnabledByDefault: true,
+	Description:      "Extract raw merge requests notes data into tool layer table GitlabMrNote",
+	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE_REVIEW},
+	Dependencies:     []*plugin.SubTaskMeta{&CollectApiMrNotesMeta},
 }
 
 func ExtractApiMergeRequestsNotes(taskCtx plugin.SubTaskContext) errors.Error {

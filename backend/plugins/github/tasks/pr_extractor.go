@@ -32,12 +32,12 @@ func init() {
 }
 
 var ExtractApiPullRequestsMeta = plugin.SubTaskMeta{
-	Name:                   "extractApiPullRequests",
-	EntryPoint:             ExtractApiPullRequests,
-	EnabledByDefault:       true,
-	Description:            "Extract raw PullRequests data into tool layer table github_pull_requests",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_CROSS, plugin.DOMAIN_TYPE_CODE_REVIEW},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&CollectApiPullRequestsMeta},
+	Name:             "extractApiPullRequests",
+	EntryPoint:       ExtractApiPullRequests,
+	EnabledByDefault: true,
+	Description:      "Extract raw PullRequests data into tool layer table github_pull_requests",
+	DomainTypes:      []string{plugin.DOMAIN_TYPE_CROSS, plugin.DOMAIN_TYPE_CODE_REVIEW},
+	Dependencies:     []*plugin.SubTaskMeta{&CollectApiPullRequestsMeta},
 }
 
 type GithubApiPullRequest struct {

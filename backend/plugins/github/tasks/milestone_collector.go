@@ -35,12 +35,12 @@ func init() {
 const RAW_MILESTONE_TABLE = "github_milestones"
 
 var CollectMilestonesMeta = plugin.SubTaskMeta{
-	Name:                   "collectApiMilestones",
-	EntryPoint:             CollectApiMilestones,
-	EnabledByDefault:       true,
-	Description:            "Collect milestone data from Github api, does not support either timeFilter or diffSync.",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_TICKET},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ExtractApiCommitStatsMeta},
+	Name:             "collectApiMilestones",
+	EntryPoint:       CollectApiMilestones,
+	EnabledByDefault: true,
+	Description:      "Collect milestone data from Github api, does not support either timeFilter or diffSync.",
+	DomainTypes:      []string{plugin.DOMAIN_TYPE_TICKET},
+	Dependencies:     []*plugin.SubTaskMeta{&ExtractApiCommitStatsMeta},
 }
 
 func CollectApiMilestones(taskCtx plugin.SubTaskContext) errors.Error {

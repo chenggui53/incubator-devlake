@@ -34,12 +34,12 @@ func init() {
 }
 
 var ConvertPullRequestCommitsMeta = plugin.SubTaskMeta{
-	Name:                   "convertPullRequestCommits",
-	EntryPoint:             ConvertPullRequestCommits,
-	EnabledByDefault:       true,
-	Description:            "Convert tool layer table github_pull_request_commits into  domain layer table pull_request_commits",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_CROSS, plugin.DOMAIN_TYPE_CODE_REVIEW},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ConvertIssueLabelsMeta},
+	Name:             "convertPullRequestCommits",
+	EntryPoint:       ConvertPullRequestCommits,
+	EnabledByDefault: true,
+	Description:      "Convert tool layer table github_pull_request_commits into  domain layer table pull_request_commits",
+	DomainTypes:      []string{plugin.DOMAIN_TYPE_CROSS, plugin.DOMAIN_TYPE_CODE_REVIEW},
+	Dependencies:     []*plugin.SubTaskMeta{&ConvertIssueLabelsMeta},
 }
 
 func ConvertPullRequestCommits(taskCtx plugin.SubTaskContext) (err errors.Error) {

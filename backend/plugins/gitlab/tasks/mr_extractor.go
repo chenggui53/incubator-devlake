@@ -74,12 +74,12 @@ type Reviewer struct {
 }
 
 var ExtractApiMergeRequestsMeta = plugin.SubTaskMeta{
-	Name:                   "extractApiMergeRequests",
-	EntryPoint:             ExtractApiMergeRequests,
-	EnabledByDefault:       true,
-	Description:            "Extract raw merge requests data into tool layer table GitlabMergeRequest and GitlabReviewer",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_CODE_REVIEW},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&CollectApiMergeRequestsMeta},
+	Name:             "extractApiMergeRequests",
+	EntryPoint:       ExtractApiMergeRequests,
+	EnabledByDefault: true,
+	Description:      "Extract raw merge requests data into tool layer table GitlabMergeRequest and GitlabReviewer",
+	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE_REVIEW},
+	Dependencies:     []*plugin.SubTaskMeta{&CollectApiMergeRequestsMeta},
 }
 
 func ExtractApiMergeRequests(taskCtx plugin.SubTaskContext) errors.Error {

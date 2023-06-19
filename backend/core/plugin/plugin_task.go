@@ -93,12 +93,12 @@ type SubTaskMeta struct {
 	Name       string
 	EntryPoint SubTaskEntryPoint
 	// Required SubTask will be executed no matter what
-	Required               bool
-	EnabledByDefault       bool
-	Description            string
-	DomainTypes            []string
-	DependencySubTaskMetas []*SubTaskMeta
-	DependencyTables       []string
+	Required         bool
+	EnabledByDefault bool
+	Description      string
+	DomainTypes      []string
+	Dependencies     []*SubTaskMeta
+	DependencyTables []string
 }
 
 // PluginTask Implement this interface to let framework run tasks for you

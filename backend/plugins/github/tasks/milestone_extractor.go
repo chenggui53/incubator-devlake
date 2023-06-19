@@ -30,12 +30,12 @@ func init() {
 }
 
 var ExtractMilestonesMeta = plugin.SubTaskMeta{
-	Name:                   "extractMilestones",
-	EntryPoint:             ExtractMilestones,
-	EnabledByDefault:       true,
-	Description:            "Extract raw milestone data into tool layer table github_milestones",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_TICKET},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&CollectMilestonesMeta},
+	Name:             "extractMilestones",
+	EntryPoint:       ExtractMilestones,
+	EnabledByDefault: true,
+	Description:      "Extract raw milestone data into tool layer table github_milestones",
+	DomainTypes:      []string{plugin.DOMAIN_TYPE_TICKET},
+	Dependencies:     []*plugin.SubTaskMeta{&CollectMilestonesMeta},
 }
 
 type MilestonesResponse struct {

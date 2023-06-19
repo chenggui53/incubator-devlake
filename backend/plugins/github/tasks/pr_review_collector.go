@@ -40,12 +40,12 @@ const RAW_PR_REVIEW_TABLE = "github_api_pull_request_reviews"
 // this struct should be moved to `gitub_api_common.go`
 
 var CollectApiPullRequestReviewsMeta = plugin.SubTaskMeta{
-	Name:                   "collectApiPullRequestReviews",
-	EntryPoint:             CollectApiPullRequestReviews,
-	EnabledByDefault:       true,
-	Description:            "Collect PullRequestReviews data from Github api, supports both timeFilter and diffSync.",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_CROSS, plugin.DOMAIN_TYPE_CODE_REVIEW},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ExtractApiPullRequestCommitsMeta},
+	Name:             "collectApiPullRequestReviews",
+	EntryPoint:       CollectApiPullRequestReviews,
+	EnabledByDefault: true,
+	Description:      "Collect PullRequestReviews data from Github api, supports both timeFilter and diffSync.",
+	DomainTypes:      []string{plugin.DOMAIN_TYPE_CROSS, plugin.DOMAIN_TYPE_CODE_REVIEW},
+	Dependencies:     []*plugin.SubTaskMeta{&ExtractApiPullRequestCommitsMeta},
 }
 
 func CollectApiPullRequestReviews(taskCtx plugin.SubTaskContext) errors.Error {

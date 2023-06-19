@@ -55,12 +55,12 @@ type SimpleGithubApiJob struct {
 }
 
 var CollectRunsMeta = plugin.SubTaskMeta{
-	Name:                   "collectRuns",
-	EntryPoint:             CollectRuns,
-	EnabledByDefault:       true,
-	Description:            "Collect Runs data from Github action api, supports both timeFilter and diffSync.",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_CICD},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&CollectAccountOrgMeta},
+	Name:             "collectRuns",
+	EntryPoint:       CollectRuns,
+	EnabledByDefault: true,
+	Description:      "Collect Runs data from Github action api, supports both timeFilter and diffSync.",
+	DomainTypes:      []string{plugin.DOMAIN_TYPE_CICD},
+	Dependencies:     []*plugin.SubTaskMeta{&CollectAccountOrgMeta},
 }
 
 func CollectRuns(taskCtx plugin.SubTaskContext) errors.Error {

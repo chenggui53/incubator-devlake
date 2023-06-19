@@ -49,12 +49,12 @@ type ApiJob struct {
 }
 
 var ExtractApiJobsMeta = plugin.SubTaskMeta{
-	Name:                   "extractApiJobs",
-	EntryPoint:             ExtractApiJobs,
-	EnabledByDefault:       true,
-	Description:            "Extract raw GitlabJob data into tool layer table GitlabPipeline",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_CICD},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&CollectApiJobsMeta},
+	Name:             "extractApiJobs",
+	EntryPoint:       ExtractApiJobs,
+	EnabledByDefault: true,
+	Description:      "Extract raw GitlabJob data into tool layer table GitlabPipeline",
+	DomainTypes:      []string{plugin.DOMAIN_TYPE_CICD},
+	Dependencies:     []*plugin.SubTaskMeta{&CollectApiJobsMeta},
 }
 
 func ExtractApiJobs(taskCtx plugin.SubTaskContext) errors.Error {

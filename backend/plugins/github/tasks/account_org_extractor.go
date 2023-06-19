@@ -30,12 +30,12 @@ func init() {
 }
 
 var ExtractAccountOrgMeta = plugin.SubTaskMeta{
-	Name:                   "ExtractAccountOrg",
-	EntryPoint:             ExtractAccountOrg,
-	EnabledByDefault:       true,
-	Description:            "Extract raw account org data into tool layer table github_account_orgs",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_CROSS},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&CollectAccountOrgMeta},
+	Name:             "ExtractAccountOrg",
+	EntryPoint:       ExtractAccountOrg,
+	EnabledByDefault: true,
+	Description:      "Extract raw account org data into tool layer table github_account_orgs",
+	DomainTypes:      []string{plugin.DOMAIN_TYPE_CROSS},
+	Dependencies:     []*plugin.SubTaskMeta{&CollectAccountOrgMeta},
 }
 
 type GithubAccountOrgsResponse struct {

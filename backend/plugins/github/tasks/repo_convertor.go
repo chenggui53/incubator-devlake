@@ -57,12 +57,12 @@ type GithubApiRepo struct {
 }
 
 var ConvertRepoMeta = plugin.SubTaskMeta{
-	Name:                   "convertRepo",
-	EntryPoint:             ConvertRepo,
-	EnabledByDefault:       true,
-	Description:            "Convert tool layer table github_repos into  domain layer table repos and boards",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_CODE, plugin.DOMAIN_TYPE_TICKET, plugin.DOMAIN_TYPE_CICD, plugin.DOMAIN_TYPE_CODE_REVIEW, plugin.DOMAIN_TYPE_CROSS},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&EnrichPullRequestIssuesMeta},
+	Name:             "convertRepo",
+	EntryPoint:       ConvertRepo,
+	EnabledByDefault: true,
+	Description:      "Convert tool layer table github_repos into  domain layer table repos and boards",
+	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE, plugin.DOMAIN_TYPE_TICKET, plugin.DOMAIN_TYPE_CICD, plugin.DOMAIN_TYPE_CODE_REVIEW, plugin.DOMAIN_TYPE_CROSS},
+	Dependencies:     []*plugin.SubTaskMeta{&EnrichPullRequestIssuesMeta},
 }
 
 func ConvertRepo(taskCtx plugin.SubTaskContext) errors.Error {

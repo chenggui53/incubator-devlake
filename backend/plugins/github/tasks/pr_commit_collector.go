@@ -43,12 +43,12 @@ const RAW_PR_COMMIT_TABLE = "github_api_pull_request_commits"
 // this struct should be moved to `gitub_api_common.go`
 
 var CollectApiPullRequestCommitsMeta = plugin.SubTaskMeta{
-	Name:                   "collectApiPullRequestCommits",
-	EntryPoint:             CollectApiPullRequestCommits,
-	EnabledByDefault:       true,
-	Description:            "Collect PullRequestCommits data from Github api, supports both timeFilter and diffSync.",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_CROSS, plugin.DOMAIN_TYPE_CODE_REVIEW},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ExtractApiEventsMeta},
+	Name:             "collectApiPullRequestCommits",
+	EntryPoint:       CollectApiPullRequestCommits,
+	EnabledByDefault: true,
+	Description:      "Collect PullRequestCommits data from Github api, supports both timeFilter and diffSync.",
+	DomainTypes:      []string{plugin.DOMAIN_TYPE_CROSS, plugin.DOMAIN_TYPE_CODE_REVIEW},
+	Dependencies:     []*plugin.SubTaskMeta{&ExtractApiEventsMeta},
 }
 
 type SimplePr struct {

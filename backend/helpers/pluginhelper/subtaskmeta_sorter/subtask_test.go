@@ -25,16 +25,16 @@ import (
 
 func Test_topologicalSort(t *testing.T) {
 	pluginA := plugin.SubTaskMeta{
-		Name:                   "A",
-		DependencySubTaskMetas: []*plugin.SubTaskMeta{},
+		Name:         "A",
+		Dependencies: []*plugin.SubTaskMeta{},
 	}
 	pluginB := plugin.SubTaskMeta{
-		Name:                   "B",
-		DependencySubTaskMetas: []*plugin.SubTaskMeta{&pluginA},
+		Name:         "B",
+		Dependencies: []*plugin.SubTaskMeta{&pluginA},
 	}
 	pluginC := plugin.SubTaskMeta{
-		Name:                   "C",
-		DependencySubTaskMetas: []*plugin.SubTaskMeta{&pluginA},
+		Name:         "C",
+		Dependencies: []*plugin.SubTaskMeta{&pluginA},
 	}
 	type args struct {
 		metas []*plugin.SubTaskMeta
@@ -68,13 +68,13 @@ func Test_topologicalSort(t *testing.T) {
 			args: args{[]*plugin.SubTaskMeta{
 				&plugin.SubTaskMeta{
 					Name: "D",
-					DependencySubTaskMetas: []*plugin.SubTaskMeta{&plugin.SubTaskMeta{
+					Dependencies: []*plugin.SubTaskMeta{&plugin.SubTaskMeta{
 						Name: "E",
 					}},
 				},
 				&plugin.SubTaskMeta{
 					Name: "E",
-					DependencySubTaskMetas: []*plugin.SubTaskMeta{&plugin.SubTaskMeta{
+					Dependencies: []*plugin.SubTaskMeta{&plugin.SubTaskMeta{
 						Name: "D",
 					}},
 				},

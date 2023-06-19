@@ -37,8 +37,8 @@ var ExtractApiCommentsMeta = plugin.SubTaskMeta{
 	EnabledByDefault: true,
 	Description: "Extract raw comment data  into tool layer table github_pull_request_comments" +
 		"and github_issue_comments",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_CODE_REVIEW, plugin.DOMAIN_TYPE_TICKET},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&CollectApiCommentsMeta},
+	DomainTypes:  []string{plugin.DOMAIN_TYPE_CODE_REVIEW, plugin.DOMAIN_TYPE_TICKET},
+	Dependencies: []*plugin.SubTaskMeta{&CollectApiCommentsMeta},
 }
 
 type IssueComment struct {

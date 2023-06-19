@@ -39,12 +39,12 @@ func init() {
 const RAW_COMMIT_STATS_TABLE = "github_api_commit_stats"
 
 var CollectApiCommitStatsMeta = plugin.SubTaskMeta{
-	Name:                   "collectApiCommitStats",
-	EntryPoint:             CollectApiCommitStats,
-	EnabledByDefault:       false,
-	Description:            "Collect commitStats data from Github api, does not support either timeFilter or diffSync.",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_CODE},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ExtractApiCommitsMeta},
+	Name:             "collectApiCommitStats",
+	EntryPoint:       CollectApiCommitStats,
+	EnabledByDefault: false,
+	Description:      "Collect commitStats data from Github api, does not support either timeFilter or diffSync.",
+	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE},
+	Dependencies:     []*plugin.SubTaskMeta{&ExtractApiCommitsMeta},
 }
 
 func CollectApiCommitStats(taskCtx plugin.SubTaskContext) errors.Error {

@@ -93,10 +93,10 @@ func CollectApiComments(taskCtx plugin.SubTaskContext) errors.Error {
 }
 
 var CollectApiCommentsMeta = plugin.SubTaskMeta{
-	Name:                   "collectApiComments",
-	EntryPoint:             CollectApiComments,
-	EnabledByDefault:       true,
-	Description:            "Collect comments data from Github api, supports both timeFilter and diffSync.",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_CODE_REVIEW, plugin.DOMAIN_TYPE_TICKET},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&ExtractApiPullRequestsMeta},
+	Name:             "collectApiComments",
+	EntryPoint:       CollectApiComments,
+	EnabledByDefault: true,
+	Description:      "Collect comments data from Github api, supports both timeFilter and diffSync.",
+	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE_REVIEW, plugin.DOMAIN_TYPE_TICKET},
+	Dependencies:     []*plugin.SubTaskMeta{&ExtractApiPullRequestsMeta},
 }

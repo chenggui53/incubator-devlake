@@ -41,12 +41,12 @@ type GitlabApiTag struct {
 }
 
 var ExtractTagMeta = plugin.SubTaskMeta{
-	Name:                   "extractApiTag",
-	EntryPoint:             ExtractApiTag,
-	EnabledByDefault:       false,
-	Description:            "Extract raw tag data into tool layer table GitlabTag",
-	DomainTypes:            []string{plugin.DOMAIN_TYPE_CODE},
-	DependencySubTaskMetas: []*plugin.SubTaskMeta{&CollectTagMeta},
+	Name:             "extractApiTag",
+	EntryPoint:       ExtractApiTag,
+	EnabledByDefault: false,
+	Description:      "Extract raw tag data into tool layer table GitlabTag",
+	DomainTypes:      []string{plugin.DOMAIN_TYPE_CODE},
+	Dependencies:     []*plugin.SubTaskMeta{&CollectTagMeta},
 }
 
 func ExtractApiTag(taskCtx plugin.SubTaskContext) errors.Error {
