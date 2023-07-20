@@ -29,6 +29,10 @@ import (
 	"reflect"
 )
 
+func init() {
+	RegisterSubtaskMeta(&ConvertBoardMeta)
+}
+
 const RAW_BOARD_TABLE = "jira_api_boards"
 
 var ConvertBoardMeta = plugin.SubTaskMeta{
@@ -37,6 +41,13 @@ var ConvertBoardMeta = plugin.SubTaskMeta{
 	EnabledByDefault: true,
 	Description:      "convert Jira board",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_TICKET},
+	DependencyTables: []string{
+		models.JiraBoard{}.TableName(), // cursor
+		RAW_BOARD_TABLE,
+	},
+	ProductTables: []string{
+		ticket.Board{}.TableName(),
+	},
 }
 
 func ConvertBoard(taskCtx plugin.SubTaskContext) errors.Error {

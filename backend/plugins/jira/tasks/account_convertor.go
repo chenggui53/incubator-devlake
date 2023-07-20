@@ -29,12 +29,22 @@ import (
 	"reflect"
 )
 
+func init() {
+	RegisterSubtaskMeta(&ConvertAccountsMeta)
+}
+
 var ConvertAccountsMeta = plugin.SubTaskMeta{
 	Name:             "convertAccounts",
 	EntryPoint:       ConvertAccounts,
 	EnabledByDefault: true,
 	Description:      "convert Jira accounts",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_CROSS},
+	DependencyTables: []string{
+		models.JiraAccount{}.TableName(), // cursor
+	},
+	ProductTables: []string{
+		crossdomain.Account{}.TableName(),
+	},
 }
 
 func ConvertAccounts(taskCtx plugin.SubTaskContext) errors.Error {
