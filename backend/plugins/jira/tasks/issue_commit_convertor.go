@@ -28,12 +28,24 @@ import (
 	"reflect"
 )
 
+func init() {
+	RegisterSubtaskMeta(&ConvertIssueCommitsMeta)
+}
+
 var ConvertIssueCommitsMeta = plugin.SubTaskMeta{
 	Name:             "convertIssueCommits",
 	EntryPoint:       ConvertIssueCommits,
 	EnabledByDefault: true,
 	Description:      "convert Jira issue commits",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_CROSS},
+	DependencyTables: []string{
+		models.JiraIssueCommit{}.TableName(), // cursor
+		models.JiraBoardIssue{}.TableName(),  // cursor
+		models.JiraIssue{}.TableName(),       // id generator
+	},
+	ProductTables: []string{
+		crossdomain.IssueCommit{}.TableName(),
+	},
 }
 
 func ConvertIssueCommits(taskCtx plugin.SubTaskContext) errors.Error {
