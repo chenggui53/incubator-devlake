@@ -15,22 +15,36 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package models
+package common
 
 import (
-	"github.com/apache/incubator-devlake/core/models/common"
+	"encoding/json"
+	"testing"
+	"time"
+
+	"github.com/apache/incubator-devlake/core/errors"
+
+	"github.com/stretchr/testify/assert"
 )
 
-type TapdIterationBug struct {
-	common.NoPKModel
-	ConnectionId   uint64 `gorm:"primaryKey"`
-	IterationId    uint64 `gorm:"primaryKey"`
-	WorkspaceId    uint64 `gorm:"primaryKey"`
-	BugId          uint64 `gorm:"primaryKey"`
-	ResolutionDate *common.CSTTime
-	BugCreatedDate *common.CSTTime
+type CSTTimeRecord struct {
+	Created CSTTime
 }
 
-func (TapdIterationBug) TableName() string {
-	return "_tool_tapd_iteration_bugs"
+type CSTTimeRecordP struct {
+	Created *CSTTime
+}
+
+func TestCSTTime(t *testing.T) {
+	pairs := map[string]time.Time{
+		`{ "Created": "2021-07-30 19:14:33" }`: TimeMustParse("2021-07-30T11:14:33Z"),
+		`{ "Created": "2021-07-30" }`:          TimeMustParse("2021-07-29T16:00:00Z"),
+	}
+
+	for input, expected := range pairs {
+		var record CSTTimeRecord
+		err := errors.Convert(json.Unmarshal([]byte(input), &record))
+		assert.Nil(t, err)
+		assert.Equal(t, expected, time.Time(record.Created).UTC())
+	}
 }
